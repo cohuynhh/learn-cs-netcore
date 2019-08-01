@@ -1,0 +1,111 @@
+<?
+use XT\Core\System\KeyView;
+use XT\Core\Common\Common;
+/**
+ * @var PhpRenderer $this
+ */
+$index_article = Common::sendevent(KeyView::DYNAMIC_LOAD_PHTML,
+    ['file'=>'module/Application/view/dynamiccontent/CsNetCore.php', 'view'=>$this])->last();
+
+$nav = $index_article->renderlist();
+
+Common::eventValue(KeyView::startNav(), $nav);
+
+$index_article = [
+    ['csharplagi', 'Giới thiệu C#'],
+    ['cshelloworld', 'Chương trình C# đầu tiên'],
+
+
+
+];
+
+?>
+<?=Common::createULlink($index_article, '#', 'class="list-group list-group-flush"', 'class="list-group-item p-0"'); ?>
+
+<a id="<?=$index_article[0][0]?>" name="<?=$index_article[0][0]?>"></a>
+<h2 class="display-4 font35 text-success">Giới thiệu về C# và .NET FRAMEWORK</h2>
+<p><strong>C#</strong> là một ngôn ngữ lập trình hướng đối tượng rất tường minh, rõ ràng. C# được dùng để phát triển nhiều ứng dụng (Ứng dụng Windows, Linux, macOS, Web ...) có tính hiệu năng cao và bảo mật thi hành trên nền tảng <strong>.NET Framework</strong></p>
+<p>Microsoft tạo ra <strong>.NET Framework</strong> năm 2003, đi cùng với nó ngôn ngữ lập trình mới được giới thiệu là C#, dùng để phát triển các ứng dụng chạy trên nền tảng .NET Framework.</p>
+
+    <p><strong class="text-danger">.NET Framework</strong></p>
+<p><strong>.NET Framework</strong> bao gồm thành phần <strong>CLR</strong> (Common Language Runtime)s và các thư viện lớp .NET framework.</p>
+<p><strong>CRL</strong> là nền tảng của .NET Framework. Nó có chức năng quản lý  mã ở thời điểm thực thi, cung cấp các dịch vụ cốt yếu như quản lý bộ nhớ hay các chức năng khác nhau dành cho code của bạn. </p>
+<p><strong>Thư viện lớp</strong> là một tập hợp các lớp, giao diện (interface), kiểu giá trị nó cho phép bạn sử dụng để thi hành rất nhiều tác vụ trong lập trình: ví dụ như xử lý dữ liệu, truy cập file, làm việc với văn bản ... Từ thư viện lớp cung cấp sẵn này, các chương trình C# phát triển và mở rộng để thêm vào các chức năng khác nhau.</p>
+<p><strong>Một số đặc điểm của ngôn ngữ lập trình C#</strong></p>
+<ul>
+    <li>Cú pháp đơn giản - giống Java</li>
+    <li>Các phương thức, thuộc tính bắt buộc khai báo trong lớp</li>
+    <li>Biến được khai báo với kiểu dữ liệu</li>
+    <li>Các đối tượng không thể được giải phóng tường minh</li>
+    <li>...</li>
+</ul>
+    <p><strong class="text-danger">.NET Core</strong></p>
+<p>Trong khi <strong>.NET Framework</strong> chạy trên hệ thống Windows, từ năm 2016 MS giới thiệu .NET Core 1.0 (hiện là 3.0) chó thể chạy đa nền tảng (trên Windows, macOS, Linux). <strong>.NET Core</strong> có thể hiểu như là một tập con trong .NET Framework, .NET Core cũng có một CLR và thư viện lớp tương tự như .NET Framework (nhưng được viết lại, loại bỏ dependencies để nó nhỏ gọn). NET Core 2.0  hỗ trợ tới 32000 API của .NET Framework và 70% các gói từ Nuget của .NET Framework được chuyển hỗ trợ .NET Core.</p>
+<p class="alert alert-danger">Những bài viết này sử dụng <strong>.NET Core</strong> để học C# nhằm có thể sử dụng Windows, macOS, Ubuntu để viết code C# và chạy ứng dụng.</p>
+
+    <a id="<?=$index_article[1][0]?>" name="<?=$index_article[1][0]?>"></a>
+    <h2 class="display-4 font35 text-success">Ứng dụng C# đầu tiên với Visual Studio Code</h2>
+
+    <p class="alert alert-warning">Để tập trung vào các khía cạnh cốt lõi của C#, sẽ thực hành trên các ứng dụng loại <strong>C# Console (.NET Core)</strong> (loại ứng dụng dòng lệnh không sử dụng giao diện đồ họa GUI)</p>
+
+    <p><strong class="text-danger">Sử dụng Visual Studio</strong></p>
+    <p>Trong Windows và macOS bạn có thể tải và cài đặt <a href="https://visualstudio.microsoft.com/vs/community/" target="_blank">Visual Studio Community</a></p>
+    <img src="https://raw.githubusercontent.com/xuanthulabnet/learn-cs-netcore/master/imgs/cs001.png" alt="CSharp VS">
+    <p><strong class="text-danger">Sử dụng Visual Studio Code</strong></p>
+    <p>Với mục đích có thể viết ứng dụng trên cả Windows, Linux, macOS có thể tải về và sử dụng <a href="https://code.visualstudio.com/" target="_blank">Visual Studio Code</a></p>
+<p>Trước tiên cần tải và cài đặt vào hệ thống <a target="_blank" href="https://dotnet.microsoft.com/download">.NET Core SDK</a> (<i>Chọn và cài đặt phiên bản theo hệ thống Windows, Linux hay macOS của bạn</i>)</p>
+<p>Sau khi cài đặt .NET Core gõ lệnh sau vào Terminal (trong Windows có thể dùng PowerShell) để kiểm tra: <code>dotnet --version</code></p>
+<p>Sau khi cài đặt Visual Studio Code, để nó hỗ trợ <code>C#</code> và dự án viết cho .NET Core cần cài đặt các Extension sau:</p>
+<ul>
+    <li><a href="https://marketplace.visualstudio.com/items?itemName=ms-vscode.csharp" target="_blank">C# for Visual Studio Code (powered by OmniSharp)</a></li>
+    <li><a href="https://marketplace.visualstudio.com/items?itemName=formulahendry.code-runner" target="_blank">Code Runner</a></li>
+    <li><a href="https://marketplace.visualstudio.com/items?itemName=jchannon.csharpextensions" target="_blank">C# Extensions
+        </a></li>
+    <li><a href="https://marketplace.visualstudio.com/items?itemName=quicktype.quicktype" target="_blank">Paste JSON as Code</a></li>
+</ul>
+    <img src="https://raw.githubusercontent.com/xuanthulabnet/learn-cs-netcore/master/imgs/cs002.png" alt="CSharp VS">
+<p>Tiến hành tạo ứng dụng console <code>CSHelloWorld</code> in ra lời chào trên màn hình.</p>
+<p><span class="badge badge-danger">Bước 1)</span> Tạo một thư mục dự án đặt tên thư mục là <code>CSHelloWorld</code>, từ dòng lệnh chuyển vào thư mục đó (lệnh cd). Rồi gõ lệnh khởi tạo dự án C# .NET Core kiểu console</p>
+<pre class="prettyprint p-2">dotnet new console</pre>
+<p>Sau lệnh này nó sẽ tạo ra các file mã nguồn, cấu hình, thư mục cần thiết trong CSHelloWorld, để khởi tạo một dự án C# .NET Core mới.</p>
+    <p><span class="badge badge-danger">Bước 2)</span> Mở thư mực CSHelloWorld bằng Visual Studio Code, trong thư mục đó có sẵn đoạn code file ví dụ mẫu có tên <code>Program.cs</code>, mở file đó ra và sửa đoạn mã như hình dưới.</p>
+<pre class="prettyprint lang-cs">
+using System;
+
+namespace CSHelloWorld
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Xin chào C# NET CORE!");
+        }
+    }
+}</pre>
+
+<p>Để hiểu cụ thể từng câu lệnh trong đoạn mã trên sẽ trình bày trong các bài viết tiếp theo, ở đây bạn hiểu nó là một ứng dụng dạng Console (dòng lệnh) - do vậy bạn thấy nó bắt buộc phải có một hàm <code>Main</code></p>
+<p>Hàm <code>Main</code> là điểm bắt đầu chương trình được chạy.</p>
+
+<p>Để chạy đoạn mã (mở cửa sổ Terminal trong VSC: <code>CTRL + ~</code>, đang ở thư mục CSHelloWorld) gõ: </p>
+<pre class="prettyprint">dotnet run</pre>
+    <img src="https://raw.githubusercontent.com/xuanthulabnet/learn-cs-netcore/master/imgs/cs003.png" alt="CSharp VS">
+
+<p>Ngoài ra cũng có thể:</p>
+<ul>
+    <li>Nhấn <code>F5</code> để bắt đầu Debug</li>
+    <li>Nhấn <code>CTRL + F5</code> để chạy chương trình (không Debug)</li>
+    <li>Chọn menu <code>Terminal > Run Task ... </code> để thi hành build ứng dụng theo các cấu hình thiết lập trong <code>tasks.json</code> như <code>build</code>, <code>publish</code>, <code>watch</code></li>
+</ul>
+
+<p>Ví dụ khi chọn <code>Terminal > Run Task ...</code>, chọn tiếp <code>public</code> thì VSC sẽ build ứng dụng kết quả lưu ở thư mục <code>CSHelloWorld/bin/Debug/netcoreapp2.1/publish/</code> - đây là kết quả để có thể phân phối ứng dụng.</p>
+<p>Trong thư mục kết quả build của ví dụ trên, có được file <code>CSHelloWorld.dll</code>, khi phân phối để chạy ứng dụng có thể gõ</p>
+
+    <pre class="p-2">dotnet CSHelloWorld.dll</pre>
+    <img src="https://raw.githubusercontent.com/xuanthulabnet/learn-cs-netcore/master/imgs/cs004.png" alt="CSharp VS">
+<p>Như vậy đã có một ứng dụng C# NET Core đơn giản, nó có thể chạy trên Windows, Linux, macOS miễn là hệ thống đó có cài đặt .NET Core</p>
+
+<p>Chi tiết để Publish một ứng dụng xem trong bài viết <strong>Publish ứng dụng C# NET Core</strong></p>
+
+<?
+echo Common::createBottomIndex($index_article);
+?>

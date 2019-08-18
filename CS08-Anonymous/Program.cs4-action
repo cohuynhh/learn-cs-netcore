@@ -3,7 +3,7 @@
 namespace CS08_Anonymous
 {
     class Program
-    { 
+    {
         static public void Info(string s)
         {
             Console.ForegroundColor = ConsoleColor.Green;
@@ -18,18 +18,23 @@ namespace CS08_Anonymous
             Console.ResetColor();
         }
 
-        static void TinhTong(int a, int b, Action<string> callback)
-        {
-            int c = a + b;
-            callback("Tổng là: "  + c);
-            
-        }
-      
+ 
+
         
         static void Main(string[] args)
         { 
-             TinhTong(5, 7, Info);
-             TinhTong(3, 4, Warning); 
+            
+            Action<string> showLog;
+            
+
+            showLog = null;
+            showLog += Warning;         // Nối thêm Warning vào delegate
+            showLog += Info;            // Nối thêm Info vào delegate
+            showLog += Warning;         // Nối thêm Warning vào delegate
+
+            //Một lần gọi thi hành tất cả các phương thức trong chuỗi delegate
+            showLog("TestLog");
+
         }
     }
 }

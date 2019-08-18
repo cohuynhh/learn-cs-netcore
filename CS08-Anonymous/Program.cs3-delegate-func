@@ -1,0 +1,19 @@
+﻿using System;
+
+namespace CS08_Anonymous
+{
+    class Program
+    {
+        static int Sum(int x, int y)
+        {
+            return x + y;
+        }
+        static void Main(string[] args)
+        { 
+            Func<int,int,int> tinhtong;         // biến tinhtong phù hợp với các hàm trả về kiểu int, có 2 tham số kiểu int
+            tinhtong = Sum;                     // Hàm Sum phù hợp nên có thể gán cho biến
+            
+            Console.WriteLine(tinhtong(5,10));  // In ra 15
+        }
+    }
+}

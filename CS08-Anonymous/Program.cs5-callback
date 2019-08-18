@@ -22,7 +22,6 @@ namespace CS08_Anonymous
         {
             int c = a + b;
             callback("Tổng là: "  + c);
-            
         }
       
         

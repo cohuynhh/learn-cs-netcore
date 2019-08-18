@@ -1,0 +1,36 @@
+﻿using System;
+
+namespace CS08_Anonymous
+{
+    class Program
+    {
+        public delegate void ShowLog(string message);
+
+        static public void Info(string s)
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine(string.Format("Info: {0}", s));
+            Console.ResetColor();
+        }
+
+        static public void Warning(string s)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine(string.Format("Waring: {0}", s));
+            Console.ResetColor();
+        }
+
+        static void Main(string[] args)
+        { 
+            ShowLog showLog;
+
+            showLog = Info;         // showLog gán bằng phương thức Info
+            showLog("Thông báo");   // Thi hành delegate chính là thi hành Info
+
+            showLog = Warning;      // showLog gán bằng phương thức Warning
+            showLog("Thông báo");   // Thi hành delegate chính là thi hành Info
+
+
+        }
+    }
+}

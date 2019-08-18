@@ -1,0 +1,17 @@
+﻿using System;
+
+namespace CS09_Anonymous_lambda
+{
+    class Program
+    {
+        public delegate int TinhToan(int a, int b);
+        static void Main(string[] args)
+        {
+            TinhToan tinhtong = (int x, int y) => {
+                return x + y;
+            }; 
+
+            int kq = tinhtong(5,1);  // x = 5;
+        }
+    }
+}

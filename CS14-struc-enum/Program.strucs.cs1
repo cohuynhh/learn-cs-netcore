@@ -1,0 +1,38 @@
+﻿using System;
+
+namespace CS14_struc_enum
+{
+    struct Product {
+        public string name;                
+        public string description;
+        public decimal price;
+
+        public string manufactory;
+
+        public void PrintInfo() {
+            Console.WriteLine(name);
+            Console.WriteLine(description);
+        }
+
+        public Product(string name) {
+            this.name = name;
+            this.description = "";
+            this.price = 0;
+            this.manufactory = "";
+        }
+    }
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Product giuongngu = new Product("Giường");
+            giuongngu.description = "Đồ nội thất XYZ";
+
+            Product banlamviec = giuongngu;
+            banlamviec.name = "Bàn";
+
+            giuongngu.PrintInfo();
+            banlamviec.PrintInfo();
+        }
+    }
+}

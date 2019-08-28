@@ -9,17 +9,14 @@ namespace CS17_Generic
     { 
         static void Main(string[] args)
         {
-            Queue<string> hoso = new Queue<string>();
-
-            hoso.Enqueue("Hồ sơ A");  // Hồ sơ xếp thứ nhất
-            hoso.Enqueue("Hồ sơ B");  // Hồ sơ xếp thứ hai
-            hoso.Enqueue("Hồ sơ C");
-
-
-            while (hoso.Count > 0) {
-                // Lấy hồ sơ xếp trước xử lý  trước, cho đến hết
-                var hs = hoso.Dequeue();
-            } 
+    var alphabet = new Stack<char>(); 
+    alphabet.Push('A'); 
+    alphabet.Push('B'); 
+    alphabet.Push('C');
+    foreach (char item in alphabet) {
+        Console.Write(item); 
+    }
+    
 
 
         }

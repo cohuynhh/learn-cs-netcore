@@ -1,24 +1,37 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
+using System.IO;
+using System.Threading.Tasks;
 namespace CS17_Generic
 {
 
-
     class Program
     { 
+        
+        
+
         static void Main(string[] args)
         {
-    var alphabet = new Stack<char>(); 
-    alphabet.Push('A'); 
-    alphabet.Push('B'); 
-    alphabet.Push('C');
-    foreach (char item in alphabet) {
-        Console.Write(item); 
-    }
-    
+             HashSet<int> hashset1 = new HashSet<int>() {
+                 5,2,3,4
+             };
+             Console.WriteLine($"Phần tử trong hashset1 {hashset1.Count}");
+             foreach (var v in hashset1)
+             {
+                 Console.Write(v + " ");
+             }
+             Console.WriteLine();
 
+            HashSet<int> hashset2 = new HashSet<int>();
+            hashset2.Add(3);
+            hashset2.Add(4);
+            if (hashset1.IsSupersetOf(hashset2))
+                Console.WriteLine($"hashset1 là tập chứa hashset2");
+             
 
+            
         }
     }
 }

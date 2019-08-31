@@ -50,11 +50,11 @@ namespace CS21_ASYNCHRONOUS
             Console.WriteLine(s);
         } 
 
-        static void Async1(string thamso1, string thamso2)
+        static async void Async1(string thamso1, string thamso2)
         {
             Func<object, string> myfunc = (object thamso) => {
                 dynamic ts = thamso;
-                for (int i = 1; i <= 5; i++) 
+                for (int i = 1; i <= 15; i++) 
                 {                    
                     WriteLine($"{Thread.CurrentThread.ManagedThreadId,3} {ts.x} {i,5} {ts.y}", ConsoleColor.Green);
                     Thread.Sleep(500);
@@ -63,14 +63,18 @@ namespace CS21_ASYNCHRONOUS
             };
             Task<string> task = new  Task<string>(myfunc, new {x = thamso1, y = thamso2});
             task.Start();
-            
-            // thread cha không bị khóa
-            Thread.Sleep(2000);
+ 
+            Thread.Sleep(500);
             WriteLine("Làm gì đó khi task đang chạy ...", ConsoleColor.Red);
 
-            string ketqua= task.Result;   // khóa (block) thread cha - chờ task hoàn thành
+            await task;     // Hàm Async1 được trả về ngay tại đây, trong khi task đang thi hành
 
-            Console.WriteLine("Làm gì đó khi task đã kết thúc");  
+            //Những đoạn code sau await (trong Async1) sẽ chỉ thi hành khi task kết thúc
+
+            string ketqua= task.Result;         // Đọc kết quả trả về của task - không phải lo block thread gọi Async1
+            Console.WriteLine("Làm gì đó khi task đã kết thúc");
+            Console.WriteLine(ketqua);          // In kết quả trả về của task
+            
         }
         static void Async2() {
 

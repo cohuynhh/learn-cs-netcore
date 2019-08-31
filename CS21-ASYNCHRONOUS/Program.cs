@@ -54,7 +54,7 @@ namespace CS21_ASYNCHRONOUS
         {
             Func<object, string> myfunc = (object thamso) => {
                 dynamic ts = thamso;
-                for (int i = 1; i <= 50; i++) 
+                for (int i = 1; i <= 5; i++) 
                 {                    
                     WriteLine($"{Thread.CurrentThread.ManagedThreadId,3} {ts.x} {i,5} {ts.y}", ConsoleColor.Green);
                     Thread.Sleep(500);
@@ -63,9 +63,15 @@ namespace CS21_ASYNCHRONOUS
             };
             Task<string> task = new  Task<string>(myfunc, new {x = thamso1, y = thamso2});
             task.Start();
+            
+            // thread cha không bị khóa
+            Thread.Sleep(2000);
+            WriteLine("Làm gì đó khi task đang chạy ...", ConsoleColor.Red);
 
+            string ketqua= task.Result;   // khóa (block) thread cha - chờ task hoàn thành
+
+            Console.WriteLine("Làm gì đó khi task đã kết thúc");  
         }
-
         static void Async2() {
 
             Action myaction = () => {

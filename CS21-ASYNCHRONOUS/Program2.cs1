@@ -1,0 +1,55 @@
+﻿using System;
+using System.Net;
+using System.Diagnostics;
+using System.Threading;
+using System.Threading.Tasks;
+namespace CS21_ASYNCHRONOUS
+{
+    class Program
+    {
+        static string DownloadUrl(string url) { 
+            using (var client = new WebClient())
+            {
+                Console.Write("Starting download ...");
+                string content = client.DownloadString(url);
+                Thread.Sleep(3000);
+                Console.WriteLine(content.Substring(0, 150)); 
+                return content; 
+            }   
+        } 
+
+        static async Task<string> DownloadUrlAsync() 
+        {
+
+            string s = "";
+            Action<object> action = (object url) =>
+            {
+                s  = DownloadUrl((string)url); 
+            };
+
+            
+            Task t1 = new Task(action, "https://xuanthulab.net");
+            t1.Start();
+            await t1; 
+            return s;
+
+        }
+ 
+  
+        static async Task Main(string[] args)
+        {
+              var abc = DownloadUrlAsync();
+              
+              Console.WriteLine("Abc");
+
+              var s = Console.ReadLine();
+              Console.WriteLine(s);
+
+              await abc;
+              
+              
+              
+
+        }
+    }
+}

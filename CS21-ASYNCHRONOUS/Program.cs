@@ -19,18 +19,39 @@ namespace CS21_ASYNCHRONOUS
             }   
         } 
 
+ // static async Task<string> DownloadWebpageAsync(string url, bool showresult) {
+        //     Func<object, string> downloadfunction = (object thamso) => {
+        //         dynamic ts = thamso;
+        //         return DownloadWebpage(ts.url, ts.showresult);
+        //     }; 
+        //     Task<string> taskdownload = new Task<string>(downloadfunction, new {url = url, showresult = showresult});
+            
+        //     taskdownload.Start();                                           // Bắt đầu thread
+
+        //     // Các đoạn code thực hiện trong khi luồng taskdownload đang chạy
+        //     Console.WriteLine("Do something while taskdownload is running");
+
+        //     // string html = taskdownload.Result;   - nếu đọc kết quả ở đây là lỗi, vì không biết  taskdownload kết  thúc chưa
+            
+        //     // taskdownload.Wait();    // Chờ cho taskdownload hoàn thành, code phía sau mới được thực hiện
+        //     // string html = taskdownload.Result;
+        //     // return html;
+
+        //     await taskdownload;
+        //     return taskdownload.Result;
+
+
+             
+ 
+        // }
 
         public static void WriteLine(string s, ConsoleColor color) {
             Console.ForegroundColor = color;
             Console.WriteLine(s);
-        }
-        
-    
-        static void Main(string[] args)
-        { 
-            Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId,3} MainThread");
-                     
+        } 
 
+        static void Async1(string thamso1, string thamso2)
+        {
             Func<object, string> myfunc = (object thamso) => {
                 dynamic ts = thamso;
                 for (int i = 1; i <= 50; i++) 
@@ -40,8 +61,12 @@ namespace CS21_ASYNCHRONOUS
                 }
                 return "Kết thúc!";
             };
-            Task<string> task1 = new  Task<string>(myfunc, new {x = "myfunc  ", y = "..."});
+            Task<string> task = new  Task<string>(myfunc, new {x = thamso1, y = thamso2});
+            task.Start();
 
+        }
+
+        static void Async2() {
 
             Action myaction = () => {
                 for (int i = 1; i <= 50; i++) 
@@ -50,32 +75,19 @@ namespace CS21_ASYNCHRONOUS
                     Thread.Sleep(2000);
                 }
             };
-            Task task2 = new Task(myaction); 
+            Task task = new Task(myaction); 
+            task.Start(); 
+        }
+ 
+        static void Main(string[] args)
+        { 
+            Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId,3} MainThread"); 
 
-            
+            Async1("myfunc  ", "...");
+            Async2();     
 
-            task1.Start();
-            task2.Start(); 
-            
-            
             Console.ReadKey();
-            Console.ResetColor();
-
-
-            // string url = "https://code.visualstudio.com/";
-            
-            // Func<object,string> downloadtask  = (object thamso) => {
-            //    dynamic prs = thamso; 
-            //    return DownloadWebpage(prs.url, prs.showresult); 
-            // };
-            
-            // Task<string> t1 = new Task<string>(downloadtask, new {url = url, showresult = true}) ;
-            // t1.Start();
-
-            // Console.WriteLine("DO Somthing (2) ...");
-            // Console.ReadLine();
-            // //t1.Wait();
-             
+            Console.ResetColor(); 
         }
     }
 }

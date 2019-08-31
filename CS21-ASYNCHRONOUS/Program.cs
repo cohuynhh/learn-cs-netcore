@@ -6,98 +6,84 @@ namespace CS21_ASYNCHRONOUS
 {
     class Program
     {
-        static string DownloadWebpage(string url, bool showresult) { 
-            using (var client = new WebClient())
-            {
-                Console.Write("Starting download ...");
-                string content = client.DownloadString(url);
-                Thread.Sleep(3000);
-                if (showresult)
-                    Console.WriteLine(content.Substring(0, 150)); 
-                    
-                return content; 
-            }   
-        } 
-
- // static async Task<string> DownloadWebpageAsync(string url, bool showresult) {
-        //     Func<object, string> downloadfunction = (object thamso) => {
-        //         dynamic ts = thamso;
-        //         return DownloadWebpage(ts.url, ts.showresult);
-        //     }; 
-        //     Task<string> taskdownload = new Task<string>(downloadfunction, new {url = url, showresult = showresult});
+        static async Task<string> DownloadWebpage(string url, bool showresult) { 
             
-        //     taskdownload.Start();                                           // Bắt đầu thread
+            Func<object, string> download_func = (object thamso) => {
+                using (var client = new WebClient())
+                {
+                    Console.Write("Starting download ...");
+                    string content = client.DownloadString(url);
+                    if (showresult)
+                        WriteLine(content.Substring(0, 50), ConsoleColor.DarkBlue);  
+                    return content; 
+                } 
+            };
 
-        //     // Các đoạn code thực hiện trong khi luồng taskdownload đang chạy
-        //     Console.WriteLine("Do something while taskdownload is running");
+            Task<string> task_download  = new Task<string>(download_func, null);
+            task_download.Start();
 
-        //     // string html = taskdownload.Result;   - nếu đọc kết quả ở đây là lỗi, vì không biết  taskdownload kết  thúc chưa
-            
-        //     // taskdownload.Wait();    // Chờ cho taskdownload hoàn thành, code phía sau mới được thực hiện
-        //     // string html = taskdownload.Result;
-        //     // return html;
+            await task_download; 
+            return task_download.Result;  
+        }   
 
-        //     await taskdownload;
-        //     return taskdownload.Result;
-
-
-             
- 
-        // }
-
+        
         public static void WriteLine(string s, ConsoleColor color) {
             Console.ForegroundColor = color;
             Console.WriteLine(s);
         } 
 
-        static async void Async1(string thamso1, string thamso2)
+        static async Task<string> Async1(string thamso1, string thamso2)
         {
             Func<object, string> myfunc = (object thamso) => {
                 dynamic ts = thamso;
-                for (int i = 1; i <= 15; i++) 
+                for (int i = 1; i <= 20; i++) 
                 {                    
-                    WriteLine($"{Thread.CurrentThread.ManagedThreadId,3} {ts.x} {i,5} {ts.y}", ConsoleColor.Green);
+                    WriteLine($"{Thread.CurrentThread.ManagedThreadId,3} {ts.x, 10} {i,5} {ts.y}", ConsoleColor.Green);
                     Thread.Sleep(500);
                 }
-                return "Kết thúc!";
+                return $"Kết thúc! {ts.x}";
             };
             Task<string> task = new  Task<string>(myfunc, new {x = thamso1, y = thamso2});
-            task.Start();
- 
-            Thread.Sleep(500);
-            WriteLine("Làm gì đó khi task đang chạy ...", ConsoleColor.Red);
 
-            await task;     // Hàm Async1 được trả về ngay tại đây, trong khi task đang thi hành
+            task.Start();  // chủ ý dòng này, để đảm bảo  task được kích hoạt
 
-            //Những đoạn code sau await (trong Async1) sẽ chỉ thi hành khi task kết thúc
+            await task;    
 
-            string ketqua= task.Result;         // Đọc kết quả trả về của task - không phải lo block thread gọi Async1
-            Console.WriteLine("Làm gì đó khi task đã kết thúc");
-            Console.WriteLine(ketqua);          // In kết quả trả về của task
-            
+            string ketqua= task.Result;   
+            Console.WriteLine(ketqua);  
+            return ketqua; 
         }
+
+
+        static async Task Main(string[] args)
+        { 
+            string url = "https://code.visualstudio.com/";
+
+            var x    = Async1("myfunc", "...");
+            var html = DownloadWebpage(url, true);
+
+            Console.ReadKey(); 
+
+
+            await x;
+            await html;
+            WriteLine(html.Result.Substring(0, 50), ConsoleColor.DarkMagenta);    // kết quả download
+        }
+
+
         static void Async2() {
 
             Action myaction = () => {
-                for (int i = 1; i <= 50; i++) 
+                for (int i = 1; i <= 50; i++)
                 {
-                    WriteLine($"{Thread.CurrentThread.ManagedThreadId,3} myaction {i,5}", ConsoleColor.Yellow);
+                    WriteLine($"{Thread.CurrentThread.ManagedThreadId,3} {"myaction", 10} {i,5}", ConsoleColor.Yellow);
                     Thread.Sleep(2000);
                 }
             };
-            Task task = new Task(myaction); 
-            task.Start(); 
+            Task task = new Task(myaction);
+            task.Start();   // tạo và chạy thread
         }
- 
-        static void Main(string[] args)
-        { 
-            Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId,3} MainThread"); 
 
-            Async1("myfunc  ", "...");
-            Async2();     
-
-            Console.ReadKey();
-            Console.ResetColor(); 
-        }
+        
     }
 }

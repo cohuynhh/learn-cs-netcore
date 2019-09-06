@@ -13,63 +13,28 @@ namespace HttpClientExample
     class Program
     {        
         static CookieContainer cookieContainer = new CookieContainer();  // Sử dụng CookieContainer riêng, để lưu lại Cookie - hoặc thêm cookie
-        public class SocketsHttpHandler : HttpClientHandler {
-
-            public SocketsHttpHandler(CookieContainer  cookie_container) {
-                
-                CookieContainer         = cookie_container;     // Thay thế CookieContainer mặc định
-                AllowAutoRedirect       = false;                // không cho tự động Redirect
-                AutomaticDecompression  = DecompressionMethods.Deflate | DecompressionMethods.GZip;
-                UseCookies              = true; 
-            }
  
-            protected override async Task<HttpResponseMessage> SendAsync( HttpRequestMessage request, CancellationToken cancellationToken)
-            {
-                ShowHeaders("Request header trước khi qua Handler ", request.Headers);
-
-                var task  = base.SendAsync(request, cancellationToken); // bắt buộc gọi
-                await task;                                             
-
-
-                ShowHeaders("Request header sau khi qua Handler ", request.Headers);
-
-                // // Xem Cookie nếu  có
-                // var uri = request.RequestUri;
-                // var cookieHeader = CookieContainer.GetCookieHeader(uri);
-                // Console.WriteLine(cookieHeader); 
-
-                return task.Result;
-            } 
-        }
-
-
-        // Chức năng in thông tin Header
-        public static void ShowHeaders(string lable, HttpHeaders headers)
-        {
-            Console.WriteLine(lable);
-            foreach (var header in headers)
-            {
-                string value = string.Join(" ", header.Value);              
-                Console.WriteLine($"{header.Key,20} : {value}");
-            }
-            Console.WriteLine();
-            
-         }
-
-
         public static async Task<string> GetWebContent(string url)
         {
-            using (var myHttpClientHandler = new SocketsHttpHandler(cookieContainer))
-            using (var httpClient = new  HttpClient(myHttpClientHandler))
+            using (var socketsHandler = new SocketsHttpHandler())
             {
-        
-                Console.WriteLine($"Starting connect {url}");
-                httpClient.DefaultRequestHeaders.Add("Accept", "text/html,application/xhtml+xml+json");
-                httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36");
-                HttpResponseMessage response = await httpClient.GetAsync(url);
-                response.EnsureSuccessStatusCode();
-                string htmltext = await response.Content.ReadAsStringAsync();
-                return htmltext;    
+                socketsHandler.CookieContainer         = cookieContainer;     // Thay thế CookieContainer mặc định
+                socketsHandler.AllowAutoRedirect       = false;                // không cho tự động Redirect
+                socketsHandler.AutomaticDecompression  = DecompressionMethods.Deflate | DecompressionMethods.GZip;
+                socketsHandler.UseCookies              = true;
+
+
+                using (var httpClient = new  HttpClient(socketsHandler))
+                {
+            
+                    Console.WriteLine($"Starting connect {url}");
+                    httpClient.DefaultRequestHeaders.Add("Accept", "text/html,application/xhtml+xml+json");
+                    httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36");
+                    HttpResponseMessage response = await httpClient.GetAsync(url);
+                    response.EnsureSuccessStatusCode();
+                    string htmltext = await response.Content.ReadAsStringAsync();
+                    return htmltext;    
+                }
             }
         }
         
@@ -83,6 +48,10 @@ namespace HttpClientExample
             htmltask.Wait();                                                                // cho hoàn thành tác vụ
             var html = htmltask.Result;                                                     // đọc chuỗi trả về (content)
             Console.WriteLine(html!=null ? html.Substring(0, 150): "Lỗi"); 
+
+            Console.WriteLine();
+            Console.WriteLine("Cookie Header:");
+            Console.WriteLine(cookieContainer.GetCookieHeader(new Uri(url)));
         }
 
     }

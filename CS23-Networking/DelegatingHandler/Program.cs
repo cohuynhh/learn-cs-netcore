@@ -117,11 +117,10 @@ namespace HttpClientExample
         
         static void Main(string[] args)
         {
-            // string url = "https://www.facebook.com/xuanthulab/";
+            string url = "https://www.facebook.com/xuanthulab/";
             // string url = "https://xuanthulab.net";
-            string url = "https://www.google.com/";
+            // string url = "https://www.google.com/";
             
-            cookieContainer.Add(new Uri(url), new Cookie("NameCookie", "ValueCookie"));     // Thêm Cookie khi gửi Requests    
 
             var htmltask = GetWebContent(url); 
             htmltask.Wait();                                                                // cho hoàn thành tác vụ

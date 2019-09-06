@@ -22,7 +22,6 @@ namespace HttpClientExample
                 HttpContent httpContent = new StringContent(json, Encoding.UTF8, "application/json");
                 request.Content = httpContent;
                 var response = await httpClient.SendAsync(request);
-                ShowHeaders(response.Headers);
                 var rcontent = await response.Content.ReadAsStringAsync();
                 return rcontent;
         
@@ -34,7 +33,6 @@ namespace HttpClientExample
     }
     class Program
     {
-
         static void Main(string[] args)
         {
             var url = "https://xuanthulab.net/api/";
@@ -47,11 +45,7 @@ namespace HttpClientExample
            ViduHttpClient vidu = new ViduHttpClient();
            var task = vidu.SendAsyncJson(url, json);
            task.Wait();
-           Console.WriteLine(task.Result);
-
-
-
-            
+           Console.WriteLine(task.Result);  
         }
     }
 }

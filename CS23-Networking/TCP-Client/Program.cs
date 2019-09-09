@@ -78,7 +78,6 @@ namespace TCP
                     bytes = await stream.ReadAsync(buffer, 0, buffer.Length);
                     ms.Write(buffer, 0, bytes);
                     Array.Clear(buffer, 0, buffer.Length); 
-                    
                 } while (bytes > 0);
 
                 ms.Seek(0, SeekOrigin.Begin);
@@ -91,7 +90,7 @@ namespace TCP
         }
         static async Task  Main(string[] args)
         {
-            string url = "https://xuanthulab.net/robots.txt";
+            string url = "https://www.google.com.vn";
             await ReadHtmlAsync(url);
         }
 

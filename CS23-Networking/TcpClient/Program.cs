@@ -1,23 +1,14 @@
 ﻿using System;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using System.Threading;
-
-using System.Text;
 using System.Net.Sockets;
-using System.Net.Http;
 using System.IO;
-using System.Net.Security;
-using System.Security.Cryptography.X509Certificates;
 
 namespace TCP
 {
- 
+
     class Program
     {    
-        
-
         public static  async Task TestConnect() {
 
             try {
@@ -38,7 +29,7 @@ namespace TCP
                             string mgs = Console.ReadLine(); 
                             if (mgs == "exit")
                                 quite = true;
-                                
+
                             await writer.WriteLineAsync(mgs);
                             string mgs_receive = await reader.ReadLineAsync();
                             Console.WriteLine(mgs_receive); 

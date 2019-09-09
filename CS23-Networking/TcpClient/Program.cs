@@ -6,16 +6,15 @@ using System.IO;
 
 namespace TCP
 {
-
     class Program
     {    
-        public static  async Task TestConnect() {
+        public static  async Task StartConnectAsync(IPAddress iPAddress, int Port) {
 
             try {
                 using (var client = new TcpClient()) 
                 {
     
-                    await client.ConnectAsync(IPAddress.Loopback, 1950);
+                    await client.ConnectAsync(iPAddress, Port);
                     Console.WriteLine("Đã kết nối");
 
                     using (NetworkStream stream = client.GetStream())
@@ -44,7 +43,10 @@ namespace TCP
         }
         static async Task  Main(string[] args)
         {
-            await TestConnect();
+            IPAddress ip = IPAddress.Parse("127.0.0.1");
+            int       port = 1950;
+
+            await StartConnectAsync(ip, port);
         }
 
     }

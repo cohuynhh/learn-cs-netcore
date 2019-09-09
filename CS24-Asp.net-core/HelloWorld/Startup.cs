@@ -11,13 +11,14 @@ namespace HelloWorld
 {
     public class Startup
     {
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            foreach (var item in services)
+            {
+                Console.WriteLine(item.ServiceType.Name.ToString());
+            }
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
@@ -25,9 +26,23 @@ namespace HelloWorld
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseStaticFiles();
+
             app.Run(async (context) =>
             {
-                await context.Response.WriteAsync("Hello World!");
+                string html = @"
+                            <!DOCTYPE html>
+                            <html>
+                            <head>
+                                <meta charset=""UTF-8"">
+                                <title>Trang web đầu tiên</title>
+                            </head>
+                            <body>
+                                <p>Đây là trang web đầu tiên</p>
+                            </body>
+                            </html>
+                ";
+                await context.Response.WriteAsync(html);
             });
         }
     }

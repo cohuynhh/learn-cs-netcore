@@ -28,6 +28,12 @@ namespace HelloWorld
 
             app.UseStaticFiles();
 
+            app.Map("/abc", app1 => {
+                app1.Run(async (context) => {
+                    await context.Response.WriteAsync("FF");
+                });
+            });
+
             app.Run(async (context) =>
             {
                 string html = @"
@@ -71,6 +77,10 @@ namespace HelloWorld
                 ";
                 await context.Response.WriteAsync(html);
             });
+
+
+
+            
         }
     }
 }

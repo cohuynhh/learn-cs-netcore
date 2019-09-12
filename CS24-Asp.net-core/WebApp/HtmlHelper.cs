@@ -84,6 +84,19 @@ public static class HtmlHelper
                   url = "/Form",
                   label = "Form"
               }
+              ,
+              new {
+                  url = "/Encoding",
+                  label = "Encoding"
+              }, 
+              new {
+                  url = "/Cookies",
+                  label = "Cookies"
+              },
+              new {
+                  url = "/Json",
+                  label = "JSON"
+              }
           };
       }
 
@@ -94,18 +107,36 @@ public static class HtmlHelper
                 <h1 class=""display-4"">Đây là một trang Web .NET Core</h1>
                 <p class=""lead"">Trang Web này xây dựng trên nền tảng  <code>.NET Core</code>,
                 chưa sử dụng kỹ thuật MVC - nhằm mục đích học tập.
+                Mã nguồn trang này tại <a target=""_blank""
+                    href=""https://github.com/xuanthulabnet/learn-cs-netcore/tree/master/CS24-Asp.net-core/WebApp"">
+                    Mã nguồn Ví dụ</a>
                 
                 </p>
 
 
                 <hr class=""my-4"">
-                <p>Để <code>Jumbotron</code> trong <code>Bootstrap</code> ấn tượng có thể sử 
-                dụng các lớp trình bày kích thước lớn như 
-                <code>.display-2</code> <code>.btn-lg</code> <code>...</code></p>
-                <a class=""btn btn-danger btn-lg"" href=""#"" role=""button"">Xem thêm</a>
+                <p><code>.NET Core</code> là một hệ thống chạy đa nền tảng (Windows, Linux, macOS)</p>
+                <a class=""btn btn-danger btn-lg"" href=""https://xuanthulab.net/lap-trinh-c-co-ban/"" role=""button"">Xem thêm</a>
             </div>
         </div>
          ";
 
       }
+
+      // Thẻ HTML cho nội dung  content  
+      public static string HtmlTag(this string content,  string tag = "p",  string _class = null) {
+          string cls = (_class != null) ? $" class=\"{_class}\"":null;
+          return $"<{tag + cls}>{content}</{tag}>";
+      }
+      public static string td(this string content) {
+          return content.HtmlTag("td");
+      }
+      public static string tr(this string content) {
+          return content.HtmlTag("tr");
+      }
+      public static string table(this string content) {
+          return content.HtmlTag("table");
+      }
+      
+      
 }

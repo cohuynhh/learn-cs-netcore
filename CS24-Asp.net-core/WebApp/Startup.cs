@@ -25,26 +25,57 @@ namespace WebApp
                 app.UseDeveloperExceptionPage();
             }
 
-             app.UseStaticFiles();
+            app.UseStaticFiles();
             
 
             app.Map("/RequestInfo", app01 => {
                 app01.Run(async (context) => {
-                    string menu = HtmlHelper.MenuTop(HtmlHelper.DefaultMenuTopItems(), context.Request);
-                    await context.Response.WriteAsync(menu);
+                    string menu         = HtmlHelper.MenuTop(HtmlHelper.DefaultMenuTopItems(), context.Request);
+                    string requestinfo  = RequestProcess.Infopage(context.Request).HtmlTag("div", "container");
+                    string html         = HtmlHelper.HtmlDocument("Thông tin Request", (menu + requestinfo));
+                    await context.Response.WriteAsync(html);
                 });
             });
              
             app.Map("/Form", app01 => {
                 app01.Run(async (context) => {
-                    string menu = HtmlHelper.MenuTop(HtmlHelper.DefaultMenuTopItems(), context.Request);
-                    await context.Response.WriteAsync(menu);
+                    string menu     = HtmlHelper.MenuTop(HtmlHelper.DefaultMenuTopItems(), context.Request);
+                    string formhtml = await RequestProcess.FormProcess(context.Request);
+                           formhtml = formhtml.HtmlTag("div", "container");
+                    string html     = HtmlHelper.HtmlDocument("Form Post", (menu + formhtml));
+                    await context.Response.WriteAsync(html);
                 });
             });
 
+
+            app.Map("/Encoding", app01 => {
+                app01.Run(async (context) => {
+                    string menu     = HtmlHelper.MenuTop(HtmlHelper.DefaultMenuTopItems(), context.Request);
+                    string htmlec   = RequestProcess.Encoding(context.Request).HtmlTag("div", "container");
+                    string html     = HtmlHelper.HtmlDocument("Encoding", (menu + htmlec));
+                    await context.Response.WriteAsync(html);
+                });
+            });
+
+            app.Map("/Cookies", app01 => {
+                app01.Run(async (context) => {
+                    string menu     = HtmlHelper.MenuTop(HtmlHelper.DefaultMenuTopItems(), context.Request);
+                    string cookies  = RequestProcess.Cookies(context.Request, context.Response).HtmlTag("div", "container");
+                     string html    = HtmlHelper.HtmlDocument("Đọc / Ghi Cookies", (menu + cookies));
+                    await context.Response.WriteAsync(html);
+                });
+            });
+            
+            app.Map("/Json", app01 => {
+                app01.Run(async (context) => {
+                    string Json  = RequestProcess.GetJson();
+                    context.Response.ContentType = "application/json";
+                    await context.Response.WriteAsync(Json);
+                });
+            });
             
 
-            app.Run(async (context) =>
+            app.Run(async (HttpContext context) =>
             {
                 string menu     = HtmlHelper.MenuTop(HtmlHelper.DefaultMenuTopItems(),context.Request);
                 string content  = HtmlHelper.HtmlTrangchu();
@@ -52,6 +83,8 @@ namespace WebApp
                 await context.Response.WriteAsync(html);
 
             });
+
+            
         }
     }
 }

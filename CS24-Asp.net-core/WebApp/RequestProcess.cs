@@ -141,8 +141,6 @@ namespace WebApp
             else {
                 dataout = HtmlEncoder.Default.Encode(datavalue);
             }
-
-
             string encoding_huongdan =  File.ReadAllText("encoding.html"); 
         
             return dataout.HtmlTag("div", "alert alert-danger") + encoding_huongdan;
@@ -173,7 +171,6 @@ namespace WebApp
         }
 
         public static string GetJson() {
-            //dotnet add package Newtonsoft.Json
             var productjson = new {
                 name  = "IPhone 11",
                 price =  1000

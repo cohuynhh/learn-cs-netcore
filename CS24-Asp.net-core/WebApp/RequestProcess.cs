@@ -13,7 +13,7 @@ namespace WebApp
             
         // Đọc các thông tin cơ bản của Request
         // Trả về HTML trình  bày các thông tin đó
-        public static string Infopage(HttpRequest request) {
+        public static string RequestInfo(HttpRequest request) {
 
             var sb = new StringBuilder(); 
 

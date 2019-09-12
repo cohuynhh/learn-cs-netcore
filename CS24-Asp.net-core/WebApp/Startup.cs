@@ -31,7 +31,7 @@ namespace WebApp
             app.Map("/RequestInfo", app01 => {
                 app01.Run(async (context) => {
                     string menu         = HtmlHelper.MenuTop(HtmlHelper.DefaultMenuTopItems(), context.Request);
-                    string requestinfo  = RequestProcess.Infopage(context.Request).HtmlTag("div", "container");
+                    string requestinfo  = RequestProcess.RequestInfo(context.Request).HtmlTag("div", "container");
                     string html         = HtmlHelper.HtmlDocument("Thông tin Request", (menu + requestinfo));
                     await context.Response.WriteAsync(html);
                 });
@@ -81,9 +81,9 @@ namespace WebApp
                 string content  = HtmlHelper.HtmlTrangchu();
                 string html     = HtmlHelper.HtmlDocument("Trang chủ", menu + content);
                 await context.Response.WriteAsync(html);
-
             });
 
+            
             
         }
     }

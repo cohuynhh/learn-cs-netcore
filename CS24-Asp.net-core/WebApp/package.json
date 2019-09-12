@@ -1,32 +1,39 @@
 {
-  "name": "webapp",
+  "name": "WebApp",
   "version": "1.0.0",
-  "description": "My Web",
+  "description": "",
   "main": "index.js",
+  "watch": {
+    "build": "src/scss/site.scss"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "webpack --watch",
-    "build": "cross-env NODE_ENV=production webpack"
-
+    "build": "webpack",
+    "watch": "npm-watch"
   },
+
+  "keywords": [],
   "author": "",
   "license": "ISC",
+  "devDependencies": {
+    "webpack": "^4.39.3",
+    "webpack-cli": "^3.3.8"
+  },
+
   "dependencies": {
     "bootstrap": "^4.3.1",
-    "jquery": "^3.4.1",
-    "popper.js": "^1.15.0"
-  },
-  "devDependencies": {
+    "copy-webpack-plugin": "^5.0.4",
     "cross-env": "^5.2.1",
     "css-loader": "^3.2.0",
     "cssnano": "^4.1.10",
     "file-loader": "^4.2.0",
+    "jquery": "^3.4.1",
     "mini-css-extract-plugin": "^0.8.0",
     "node-sass": "^4.12.0",
+    "npm-watch": "^0.6.0",
+    "popper.js": "^1.15.0",
     "postcss-loader": "^3.0.0",
     "postcss-preset-env": "^6.7.0",
-    "sass-loader": "^8.0.0",
-    "webpack": "^4.39.3",
-    "webpack-cli": "^3.3.8"
+    "sass-loader": "^8.0.0"
   }
 }

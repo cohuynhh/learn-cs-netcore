@@ -24,23 +24,20 @@ namespace WebApp
             {
                 app.UseDeveloperExceptionPage();
             }
-            app.UseStaticFiles();
+
+             app.UseStaticFiles();
             
 
             app.Map("/RequestInfo", app01 => {
                 app01.Run(async (context) => {
-                    string menu = HtmlHelper.MenuTop(HtmlHelper.MenuTopObjects(), context.Request);
+                    string menu = HtmlHelper.MenuTop(HtmlHelper.DefaultMenuTopItems(), context.Request);
                     await context.Response.WriteAsync(menu);
                 });
             });
-            
-
-
-
-
+             
             app.Map("/Form", app01 => {
                 app01.Run(async (context) => {
-                    string menu = HtmlHelper.MenuTop(HtmlHelper.MenuTopObjects(), context.Request);
+                    string menu = HtmlHelper.MenuTop(HtmlHelper.DefaultMenuTopItems(), context.Request);
                     await context.Response.WriteAsync(menu);
                 });
             });
@@ -49,10 +46,11 @@ namespace WebApp
 
             app.Run(async (context) =>
             {
-                
-                await context.Response.WriteAsync(HtmlHelper.MenuTop(
-                    HtmlHelper.MenuTopObjects(),
-                    context.Request));
+                string menu     = HtmlHelper.MenuTop(HtmlHelper.DefaultMenuTopItems(),context.Request);
+                string content  = HtmlHelper.HtmlTrangchu();
+                string html     = HtmlHelper.HtmlDocument("Trang chủ", menu + content);
+                await context.Response.WriteAsync(html);
+
             });
         }
     }

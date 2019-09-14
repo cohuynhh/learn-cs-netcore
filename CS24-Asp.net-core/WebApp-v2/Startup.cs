@@ -20,7 +20,13 @@ namespace WebApp
             services.AddTransient<LaptopName, LaptopName>();                    //  đăng ký dịch vụ, tạo mới  mỗi lần  triệu gọi
             services.AddTransient<ProductController, ProductController>();
 
-           
+            services.AddDistributedMemoryCache();
+            services.AddSession(cfg => {
+                cfg.Cookie.Name = "xuanthulab";             // Đặt tên Sesseon - tên này sử dụng ở Browser (Cookie)
+                cfg.IdleTimeout = new TimeSpan(0,60, 0);    // Thời gian tồn tại của Cookie
+            });
+
+
 
         }
 
@@ -31,19 +37,19 @@ namespace WebApp
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseDeveloperExceptionPage();
             
             app.UseStaticFiles(); 
+            app.UseSession();
 
             app.Map("/Product", appProduct => {
+
                 appProduct.Run(async (context) => {
                     await appProduct.ApplicationServices.GetService<ProductController>().List(context);
                 });
 
-            });
-
-            
-
-            
+            }); 
 
             
 

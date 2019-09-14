@@ -57,7 +57,10 @@ namespace WebApp
                 app01.Run(async (context) => {
                     string menu         = HtmlHelper.MenuTop(HtmlHelper.DefaultMenuTopItems(), context.Request);
                     string requestinfo  = RequestProcess.RequestInfo(context.Request).HtmlTag("div", "container");
-                    string html         = HtmlHelper.HtmlDocument("Thông tin Request", (menu + requestinfo));
+                    
+                    string accessinfo  = ProductController.CountAccessInfo(context).HtmlTag("div", "container");
+
+                    string html         = HtmlHelper.HtmlDocument("Thông tin Request", (menu + accessinfo + requestinfo));
                     await context.Response.WriteAsync(html);
                 });
             });

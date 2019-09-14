@@ -74,5 +74,35 @@ namespace WebApp.Controller
             Console.WriteLine(jsonSave);
         }
 
+        public static string CountAccessInfo(HttpContext context) {
+            var session       = context.Session;          // Lấy ISession
+            string key_access = "info_access";
+
+            // Lưu vào  Session thông tin truy cập
+            // Định nghĩa cấu trúc dữ liệu lưu trong Session
+            var accessInfoType = new  {
+                count     = 0,
+                lasttime  = DateTime.Now
+            };
+
+            // Đọc chuỗi lưu trong Sessin với key = info_access
+            string json = session.GetString(key_access); 
+            dynamic lastAccessInfo;
+            if (json != null) {
+                // Convert chuỗi Json - thành đối tượng
+                lastAccessInfo = JsonConvert.DeserializeObject(json, accessInfoType.GetType()); 
+            }
+            else {
+                // json chưa từng lưu trong Session, accessInfo lấy bằng giá trị khởi  tạo
+                lastAccessInfo  = accessInfoType;  
+            }
+            if (lastAccessInfo.count == 0) {
+                return "Chưa truy cập /Product lần  nào".HtmlTag("p");
+            }
+            
+            string thongtin = $"Số lần truy cập /Product: {lastAccessInfo.count}  - lần cuối: {lastAccessInfo.lasttime.ToLongTimeString()}";
+            return thongtin;
+        }
+
     }
 }

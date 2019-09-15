@@ -6,8 +6,8 @@ namespace WebApp.Middleware
 {
     public class CheckAcessMiddleware
     {
-        private readonly RequestDelegate _next;
-        public CheckAcessMiddleware(RequestDelegate next) {
+        private readonly RequestDelegate _next;                 // Lưu middlewware tiếp theo trong Pipeline
+        public CheckAcessMiddleware(RequestDelegate next) {    
             _next = next;
         }
         public async Task Invoke(HttpContext httpContext) {
@@ -23,7 +23,6 @@ namespace WebApp.Middleware
                         await httpContext.Response.WriteAsync(html);
                     }
                 );
-                
                 // Không gọi Middleware tiếp theo, httpContext.Response đã đủ thông tin trả về cho Client
             }
             else

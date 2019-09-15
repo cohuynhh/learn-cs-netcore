@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using System.Text;
 using System.Linq;
 using Newtonsoft.Json;
+using Microsoft.Extensions.Options;
+using WebApp.Options;
 
 namespace WebApp.Controller
 {
@@ -13,20 +15,23 @@ namespace WebApp.Controller
     {
         IListProductName lsPhone;
         IListProductName lsLaptop;
-        public ProductController(IListProductName lsphone, LaptopName lslaptop) {
-            Console.WriteLine(this.GetType().Name + " created");
+
+        TestOptions options;
+        public ProductController(IListProductName lsphone, LaptopName lslaptop, IOptions<TestOptions> options) {
             this.lsPhone  = lsphone;
             this.lsLaptop = lslaptop;
+            this.options  = options.Value;
+            
         }
         public async Task List(HttpContext context) {
             var sb = new StringBuilder(); 
 
             string lsPhoneHTML  = string.Join("", lsPhone.GetNames().Select(name  => name.HtmlTag("li"))).HtmlTag("ul");
             string lsLaptopHTML = string.Join("", lsLaptop.GetNames().Select(name => name.HtmlTag("li"))).HtmlTag("ul");
-            sb.Append("Danh sách điện thoại".HtmlTag("h2"));
+            sb.Append($"{options.opt_key1}".HtmlTag("h2"));
             sb.Append(lsPhoneHTML);
 
-            sb.Append("Danh sách Laptop".HtmlTag("h2"));
+            sb.Append($"{options.opt_key2.k1}".HtmlTag("h2"));
             sb.Append(lsLaptopHTML);
 
             string menu         = HtmlHelper.MenuTop(HtmlHelper.DefaultMenuTopItems(), context.Request);

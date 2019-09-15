@@ -18,11 +18,24 @@ namespace WebApp
     public class Startup
     {
         private IServiceCollection _services;
+        IConfiguration _configuration;
+
+        public Startup(IConfiguration configuration) {
+            _configuration = configuration;
+        }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            
+
+            services.AddOptions();
+            var testoptions = _configuration.GetSection("TestOptions");
+            services.Configure<TestOptions>(testoptions);
+
+
+
             services.AddSingleton<IListProductName, PhoneName>();               //  đăng ký dịch vụ, đối tượng chỉ tạo một lần (cận thận)
             services.AddTransient<LaptopName, LaptopName>();                    //  đăng ký dịch vụ, tạo mới  mỗi lần  triệu gọi
             services.AddTransient<ProductController, ProductController>();
@@ -139,18 +152,14 @@ namespace WebApp
                     StringBuilder stb = new StringBuilder();
                     IConfiguration configuration = appOptions.ApplicationServices.GetService<IConfiguration>();
 
-                    var testoptions = configuration.GetSection("TestOptions");
-                    var opt_key1    = testoptions["opt_key1"];
-                    var k1          = testoptions.GetSection("opt_key2")["k1"];
-                    var k2          = configuration["TestOptions:opt_key2:k2"];
+                    TestOptions testoptions = configuration.GetSection("TestOptions").Get<TestOptions>();
+                    var opt_key1    = testoptions.opt_key1;
+                    var k1          = testoptions.opt_key2.k1;
+                    var k2          = testoptions.opt_key2.k2;
 
                     stb.Append($"   TestOptions.opt_key1:  {opt_key1}\n");
                     stb.Append($"TestOptions.opt_key2.k1:  {k1}\n");
                     stb.Append($"TestOptions.opt_key2.k2:  {k2}\n");
-
-
-                    var x = configuration.GetSection("TestOptions").Get<TestOptions>();
-
 
                     await context.Response.WriteAsync(stb.ToString().HtmlTag("pre"));
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -12,6 +13,7 @@ namespace WebApp
 { 
     public class Startup
     {
+        IServiceCollection  _services;
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
@@ -19,8 +21,7 @@ namespace WebApp
             services.AddSingleton<IListProductName, PhoneName>();               //  đăng ký dịch vụ, đối tượng chỉ tạo một lần (cận thận)
             services.AddTransient<LaptopName, LaptopName>();                    //  đăng ký dịch vụ, tạo mới  mỗi lần  triệu gọi
             services.AddTransient<ProductController, ProductController>();
-
-           
+           _services = services;
 
         }
 
@@ -94,6 +95,25 @@ namespace WebApp
                 });
             });
             
+            app.Map("/allservice", app01 => {
+                app01.Run(async (context) => {
+
+                    var stringBuilder = new StringBuilder();
+                    stringBuilder.Append("<tr><th>Tên</th><th>Lifetime</th><th>Tên đầy đủ</th></tr>");
+                    foreach (var service in _services)
+                    {
+                        string tr = service.ServiceType.Name.ToString().HtmlTag("td") +
+                        service.Lifetime.ToString().HtmlTag("td") +
+                        service.ServiceType.FullName.HtmlTag("td"); 
+                        stringBuilder.Append(tr.HtmlTag("tr"));
+                    }
+
+                    string htmlallservice  = stringBuilder.ToString().HtmlTag("table", "table table-bordered table-sm");
+                    string html           = HtmlHelper.HtmlDocument("Các dịch vụ", (htmlallservice));
+                      
+                    await context.Response.WriteAsync(html);
+                });
+            });
 
             app.Run(async (HttpContext context) =>
             {

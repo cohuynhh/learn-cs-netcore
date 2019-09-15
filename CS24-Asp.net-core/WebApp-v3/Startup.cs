@@ -42,8 +42,7 @@ namespace WebApp
             app.UseStaticFiles(); 
             app.UseSession();
 
-            // app.UseCheckAccess();
-            app.UseMiddleware<CheckAcessMiddleware>();
+            app.UseCheckAccess();
 
             app.Map("/Product", appProduct => {
 
@@ -112,10 +111,7 @@ namespace WebApp
                 string content  = HtmlHelper.HtmlTrangchu();
                 string html     = HtmlHelper.HtmlDocument("Trang chủ", menu + content);
                 await context.Response.WriteAsync(html);
-            });
-
-            
-            
+            }); 
         }
     }
 }

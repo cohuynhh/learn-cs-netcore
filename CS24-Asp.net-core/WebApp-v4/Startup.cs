@@ -29,7 +29,6 @@ namespace WebApp
         public void ConfigureServices(IServiceCollection services)
         {
             
-
             services.AddOptions();
             var testoptions = _configuration.GetSection("TestOptions");
             services.Configure<TestOptions>(testoptions);

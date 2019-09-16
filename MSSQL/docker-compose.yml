@@ -1,0 +1,22 @@
+version: "3"                    
+
+services:                         
+  xtlab-mssql:
+    image: "mcr.microsoft.com/mssql/server:2017-latest"
+    container_name: mssqlserver
+    restart: always
+    hostname: mssql
+    environment: 
+      SA_PASSWORD: Password123 #Thiết lập password
+      ACCEPT_EULA: Y
+      # Express: 
+
+    volumes:
+      - mssqlvolume:/var/opt/mssql/data # thư mục lưu DB
+      - ./backup:/var/opt/mssql/backup
+    ports:
+      - "1439:1439"     
+                        
+volumes:                                
+    mssqlvolume:                            
+  

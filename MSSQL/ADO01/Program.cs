@@ -1,31 +1,26 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
-
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration.Json;
+using System.IO;
 
 namespace ADO01
 {
     class Program
     {
-        public static void ConnectSqlserverExample() {
-            string sqlconnectStr      = "Data Source=localhost,1433;Initial Catalog=xtlab;User ID=SA;Password=Password123"; 
-            SqlConnection connection  = new SqlConnection(sqlconnectStr);
-            connection.Open(); //  Mở kết nối - hoặc  connection.OpenAsync(); nếu dùng async
-            // thực hiện cá tác  vụ truy vấn CSDL
-            connection.Close(); //Đóng kết nối
+        public static string GetConnectString() {
+            var configBuilder = new ConfigurationBuilder()
+                       .SetBasePath(Directory.GetCurrentDirectory())      // file config ở thư mục hiện tại
+                       .AddJsonFile("appconfig.json");                    // nạp config định dạng JSON
+            var configurationroot = configBuilder.Build();                // Tạo configurationroot
+            return configurationroot["csdl:ketnoi2"];
 
         }
         static void Main(string[] args)
         {
-
-            SqlConnectionStringBuilder stringBuilder = new SqlConnectionStringBuilder();
-            stringBuilder["Server"] = "127.0.0.1,1433";
-            stringBuilder["Database"] = "xtlab";
-            stringBuilder["User Id"] = "SA";
-            stringBuilder["Password"] = "Password123";
-
-
-            SqlConnection connection = new SqlConnection(stringBuilder.ToString());
+ 
+            SqlConnection connection = new SqlConnection(GetConnectString());
             connection.StatisticsEnabled = true;
             connection.FireInfoMessageEventOnUserErrors = true;
 
@@ -46,7 +41,7 @@ namespace ADO01
                 }
             }
  
-            Console.WriteLine($"{"ConnectionString", 17} : {stringBuilder}");
+            Console.WriteLine($"{"ConnectionString", 17} : {GetConnectString()}");
             Console.WriteLine($"{"DataSource", 17} : {connection.DataSource}");
 
 
@@ -59,10 +54,7 @@ namespace ADO01
                 Console.WriteLine($"{key, 17} : {dicStatics[key]}");
             } 
         
-            connection.Close();
-
-            
-
+            connection.Close(); 
 
         }
     }

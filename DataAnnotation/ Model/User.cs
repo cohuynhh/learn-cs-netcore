@@ -1,16 +1,14 @@
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel;
-
 namespace DataAnnotation.Model
 {
     public class User
     {
-        [Required (ErrorMessage="Employee {0} is required")]
+        [Required (ErrorMessage="Cần thiết lập {0}")]
         [StringLength (100,MinimumLength=3, ErrorMessage="Tên từ 3 đến  100 ký tự")]
         [DataType(DataType.Text)]
         public string Name { get; set; }
 
-        [Range(18,99, ErrorMessage="Age should be between 18 and 99")]
+        [Range(18,99, ErrorMessage="Tuổi từ 18 đến 99")]
         public int Age { get; set; }
 
         [DataType(DataType.PhoneNumber)]

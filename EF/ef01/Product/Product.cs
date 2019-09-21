@@ -1,11 +1,11 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
-namespace EF.Product
+namespace ef01.Product
 {
     [Table("Products")]
     public class Product
     {
+        [Key]
         public int ProductId {set; get;}
 
         [Required]

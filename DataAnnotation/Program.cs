@@ -31,9 +31,7 @@ namespace DataAnnotation
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine($"    {vr.ErrorMessage}");
                 }
-            }
- 
-
+            } 
         }
     }
 }

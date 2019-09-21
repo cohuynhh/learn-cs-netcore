@@ -63,6 +63,7 @@ namespace ef01
         {
             using (var context = new ProductsContext()) 
             {
+                // context.SetLogging();
                 var products = await context.products.ToListAsync();
                 Console.WriteLine("Tất cả sản phẩm");
                 foreach (var product in products)
@@ -87,10 +88,52 @@ namespace ef01
             } 
         }
         
+        
+       public static async Task RenameProduct(int id, string newName) 
+        {
+            using (var context = new ProductsContext()) 
+            {
+                 
+                // context.SetLogging();
+                var product = await (from p in context.products
+                                  where (p.ProductId == id) select p
+                                 )
+                                .FirstOrDefaultAsync(); // Lấy  Product có  ID  chỉ  ra
+
+                if (product != null)
+                {
+                    product.Name = newName;
+                    Console.WriteLine($"{product.ProductId,2} có tên mới = {product.Name,  10}");
+                    await context.SaveChangesAsync();
+                }
+
+               
+            } 
+        }
+        // Xóa sản phẩm có ProductID = id        
+        public static async Task DeleteProduct(int id) 
+        {
+            using (var context = new ProductsContext()) 
+            {
+                 
+                context.SetLogging();
+                var product = await (from p in context.products
+                                  where (p.ProductId == id) select p
+                                 )
+                                .FirstOrDefaultAsync(); // Lấy  Product có  ID  chỉ  ra
+
+                if (product != null)
+                {
+                    context.Remove(product);
+                    Console.WriteLine($"Xóa {product.ProductId}");
+                    await context.SaveChangesAsync();
+                } 
+            } 
+        }       
 
         static void  Main(string[] args)
         {
-             ReadProducts().Wait();
+             DeleteProduct(3).Wait(); 
              
         }
     }

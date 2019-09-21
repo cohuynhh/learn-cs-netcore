@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-namespace ef01.Product
+namespace ef01
 {
     [Table("Products")]
     public class Product

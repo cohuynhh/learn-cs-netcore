@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace ef01.Product
+namespace ef01
 {
     public class ProductsContext : DbContext
     {

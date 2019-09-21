@@ -1,5 +1,9 @@
 ﻿using System;
 using ef01;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System.Threading.Tasks;
+
 namespace ef01
 {
     class Program
@@ -31,24 +35,63 @@ namespace ef01
         {
             using (var context = new ProductsContext()) 
             {
-                await  context.products.AddAsync(new Product {
-                    Name = "Sản phẩm 1",
-                    Provider = "Công ty 1"
-                });        
-                await  context.AddAsync(new Product() {
-                    Name = "Sản phẩm 2",
-                    Provider = "Công ty 1"
-                });
+                // await  context.products.AddAsync(new Product 
+                // {
+                //     Name = "Sản phẩm 1",
+                //     Provider = "Công ty 1"
+                // });        
+                // await  context.AddAsync(new Product() 
+                // {
+                //     Name = "Sản phẩm 2",
+                //     Provider = "Công ty 1"
+                // });
+
+                var p1 = new  Product() {Name = "Sản phẩm 3", Provider = "CTY A"};
+                var p2 = new  Product() {Name = "Sản phẩm 4", Provider = "CTY A"};
+                var p3 = new  Product() {Name = "Sản phẩm 5", Provider = "CTY B"};
+
+                await context.AddRangeAsync(new object[] {p1, p2, p3});
 
                 int rows = await context.SaveChangesAsync();               // Thực hiện Insert vào DB
                 Console.WriteLine($"Đã lưu {rows} sản phẩm");
+
+                
             } 
         }
 
-        static void Main(string[] args)
+       public static async Task ReadProducts() 
         {
-            InsertProduct();
-            Console.ReadKey(); 
+            using (var context = new ProductsContext()) 
+            {
+                var products = await context.products.ToListAsync();
+                Console.WriteLine("Tất cả sản phẩm");
+                foreach (var product in products)
+                {
+                    Console.WriteLine($"{product.ProductId,2} {product.Name,  10} - {product.Provider}");
+                }
+                Console.WriteLine();
+                Console.WriteLine();
+
+                products = await (from p in context.products
+                                  where (p.Provider == "CTY A") select p
+                                 )
+                                .ToListAsync();
+
+                Console.WriteLine("Sản phẩm CTY A");
+                foreach (var product in products)
+                {
+                    Console.WriteLine($"{product.ProductId,2} {product.Name,  10} - {product.Provider}");
+                }
+
+               
+            } 
+        }
+        
+
+        static void  Main(string[] args)
+        {
+             ReadProducts().Wait();
+             
         }
     }
 }

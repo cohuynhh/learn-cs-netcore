@@ -117,6 +117,7 @@ namespace ef01
             {
                  
                 context.SetLogging();
+                
                 var product = await (from p in context.products
                                   where (p.ProductId == id) select p
                                  )
@@ -131,9 +132,9 @@ namespace ef01
             } 
         }       
 
-        static void  Main(string[] args)
+        static async Task  Main(string[] args)
         {
-             DeleteProduct(3).Wait(); 
+             await DeleteProduct(3); 
              
         }
     }

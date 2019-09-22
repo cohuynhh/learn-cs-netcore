@@ -13,9 +13,9 @@ namespace ef02.Model
         [StringLength(100)]
         public string Name {set; get;}
 
-        [Column(TypeName="NTEXT")]
+        [Column(TypeName="ntext")]
         public string Description {set; get;}
 
-        // public List<Product> Products { get; } = new List<Product>();
+        public List<Product> Products { get; set;}
     }
 }

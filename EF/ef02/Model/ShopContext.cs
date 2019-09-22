@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System.Linq;
 
 namespace ef02.Model
 {
@@ -38,8 +39,7 @@ namespace ef02.Model
             }
 
         }
-        #region STATIC Methods 
-        // Xóa database
+         
         public static async Task DeleteDatabase()
         {
             using (var context = new ShopContext())
@@ -58,8 +58,39 @@ namespace ef02.Model
                 string createdInfo = created ? "Đã tạo mới" : "Đã tồn tại";
                 Console.WriteLine($"{createdInfo}");
             } 
+        } 
+
+        public static async Task InsertSampleData()  
+        {
+            using (var context = new ShopContext())
+            {
+                await context.AddRangeAsync(
+                    new Category() {Name = "Cate1", Description = "Description1"},
+                    new Category() {Name = "Cate2", Description = "Description2"}
+                );
+                await context.SaveChangesAsync();
+                Category cate2 = await  (from c  in context.categories where c.Name == "Cate2" select c)
+                                        .FirstOrDefaultAsync();
+                await  context.AddRangeAsync(
+                    new Product()  {Name = "Sản phẩm 1", Price=12, Category = cate2},
+                    new Product()  {Name = "Sản phẩm 2", Price=11, Category = cate2},
+                    new Product()  {Name = "Sản phẩm 3", Price=33, Category = cate2}
+                );             
+                await context.SaveChangesAsync(); 
+            } 
         }
-        #endregion
+
+        public static async Task<Product> FindProduct(int id) {
+            using (var context = new ShopContext())
+            {
+                 
+                var p =  await (from c  in context.products where c.ProductId == id select c)
+                                        .FirstOrDefaultAsync();
+                await  context.Entry(p).Reference(x => x.Category).LoadAsync();
+                return  p;
+                 
+            } 
+        }
 
 
     }

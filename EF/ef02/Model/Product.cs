@@ -16,9 +16,11 @@ namespace ef02.Model
         [Column(TypeName="Money")]
         public decimal Price {set; get;}
 
-        // [Required]
-        // [ForeignKey("CateId")]
+
         // public int? CategoryId {set; get;}
-        // public Category Category {set; get;}
+
+        // [Required]
+        // [ForeignKey("CategoryId")]
+        public Category Category {set; get;}
     }
 }

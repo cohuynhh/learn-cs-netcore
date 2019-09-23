@@ -16,19 +16,33 @@ namespace ef02.Model
         public DbSet<Product> products {set; get;}
         public DbSet<Category> categories {set; get;}
 
+
         override protected void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
             base.OnConfiguring(optionsBuilder);
             optionsBuilder.UseSqlServer(connect_str);
+            // optionsBuilder.UseLazyLoadingProxies();
+    
         }
-        // override protected void OnModelCreating(ModelBuilder modelBuilder) {
-        //     modelBuilder.Entity<Product>()
-        //     .HasOne(b => b.Category)
-        //     .WithMany(b => b.Products)
-        //     .OnDelete(DeleteBehavior.Cascade);
+        override protected void OnModelCreating(ModelBuilder modelBuilder) {
+            base.OnModelCreating(modelBuilder);
 
-        //     modelBuilder.Entity<Product>().HasIndex(p => p.Name);
+            modelBuilder.Entity<Product>(entity => {
+               
 
-        // }
+            });
+
+            
+            
+            // Các Fluent API
+
+            // modelBuilder.Entity<Product>()
+            // .HasOne(b => b.Category)
+            // .WithMany(b => b.Products)
+            // .OnDelete(DeleteBehavior.Cascade);
+
+            // modelBuilder.Entity<Product>().HasIndex(p => p.Name);
+
+        }
 
         public static void EnableLogging()
         {
@@ -71,10 +85,16 @@ namespace ef02.Model
                 await context.SaveChangesAsync();
                 Category cate2 = await  (from c  in context.categories where c.Name == "Cate2" select c)
                                         .FirstOrDefaultAsync();
+                Category cate1 = await  (from c  in context.categories where c.Name == "Cate1" select c)
+                                        .FirstOrDefaultAsync();
+                                       
                 await  context.AddRangeAsync(
-                    new Product()  {Name = "Sản phẩm 1", Price=12, Category = cate2},
-                    new Product()  {Name = "Sản phẩm 2", Price=11, Category = cate2},
-                    new Product()  {Name = "Sản phẩm 3", Price=33, Category = cate2}
+                    new Product()  {Name = "Sản phẩm 1",    Price=12, Category = cate2},
+                    new Product()  {Name = "Sản phẩm 2",    Price=11, Category = cate2},
+                    new Product()  {Name = "Sản phẩm 3",    Price=33, Category = cate2},
+                    new Product()  {Name = "Sản phẩm 4(1)", Price=323, Category = cate1},
+                    new Product()  {Name = "Sản phẩm 5(1)", Price=333, Category = cate1}
+
                 );             
                 await context.SaveChangesAsync(); 
             } 
@@ -87,7 +107,21 @@ namespace ef02.Model
                 var p =  await (from c  in context.products where c.ProductId == id select c)
                                         .FirstOrDefaultAsync();
                 await  context.Entry(p).Reference(x => x.Category).LoadAsync();
+                 
                 return  p;
+                 
+            } 
+        }
+
+        public static async Task<Category> FindCategoryByName(string namecate) 
+        {
+            using (var context = new ShopContext())
+            {
+                 
+                var category =  await (from c  in context.categories where c.Name == namecate select c)
+                                        .FirstOrDefaultAsync();
+                await  context.Entry(category).Collection(x => x.products).LoadAsync();
+                return  category;
                  
             } 
         }

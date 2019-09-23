@@ -17,10 +17,13 @@ namespace ef02.Model
         public decimal Price {set; get;}
 
 
-        // public int? CategoryId {set; get;}
+        public int CategoryId {set; get;}
+        [ForeignKey("CategoryId")]
+        public virtual Category Category {set; get;}
 
-        // [Required]
-        // [ForeignKey("CategoryId")]
-        public Category Category {set; get;}
+        public int? CategorySecondId;
+        [ForeignKey("CategorySecondId")]
+        [InverseProperty("OtherProduct")]
+        public Category SecondCategory {set; get;}
     }
 }

@@ -16,6 +16,8 @@ namespace ef02.Model
         [Column(TypeName="ntext")]
         public string Description {set; get;}
 
-        public List<Product> Products { get; set;}
+         public virtual ICollection<Product> products { get; set;}
+
+         public List<Product> OtherProduct {set; get;}
     }
 }

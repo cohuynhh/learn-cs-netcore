@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using ef02.Model;
+using Microsoft.EntityFrameworkCore;
 
 namespace ef02
 {
@@ -9,22 +12,23 @@ namespace ef02
          
         static async Task Main(string[] args)
         {
-            ShopContext.EnableLogging();
             await ShopContext.DeleteDatabase();
             await ShopContext.CreateDatabase();
             await ShopContext.InsertSampleData();
+            ShopContext.EnableLogging();
 
-            var p    = await ShopContext.FindProduct(2);
-            var c    = p.Category; 
-            if (p != null) 
+
+            using (var context = new ShopContext())
             {
-                Console.WriteLine($"{p.Name} có CategoryId = {p.CategoryId}");
-                string CategoryName = (c != null) ? c.Name :  "Category đang null";
-                Console.WriteLine(CategoryName);
+                // var pr = new Product() {
+                //     ProductId  = 4,
+                //     Name = "Abc"
+                // };
+                // var pr_e = context.Attach(pr);
+                // pr_e.Property(p =>  p.Name).IsModified  = true;
+                // context.SaveChanges();
+ 
             }
-
-            var cat2 = await ShopContext.FindCategoryByName("Cate1");
-            var cccc = cat2.products;
 
         }
     }

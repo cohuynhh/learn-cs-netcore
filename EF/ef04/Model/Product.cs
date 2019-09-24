@@ -28,6 +28,8 @@ namespace ef02.Model
 
          public int? UserPostId {set;  get;}
          public User UserPost {set; get;}
+
+         public int Abc  {get;  set;}
          
     }
 }

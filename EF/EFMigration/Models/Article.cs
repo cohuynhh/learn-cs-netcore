@@ -12,8 +12,8 @@ namespace EFMigration.Models
         [StringLength(100)]
         public string Title {set;  get;}
 
-        // [Column(TypeName="ntext")]
-        // public string Content {set; get;}
+        [Column(TypeName="ntext")]
+        public string Content {set; get;}
 
     }
 }

@@ -25,9 +25,7 @@ namespace EFMigration.Models
                            .AddFilter(DbLoggerCategory.Database.Command.Name, 
                                     LogLevel.Information)); 
             return serviceCollection.BuildServiceProvider()
-                    .GetService<ILoggerFactory>();
-
-                    
+                    .GetService<ILoggerFactory>();  
         }
  
     }

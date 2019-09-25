@@ -1,23 +1,23 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿    using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace EFMigration.Migrations
-{
-    public partial class InitWebDB_V1 : Migration
+    namespace EFMigration.Migrations
     {
-        protected override void Up(MigrationBuilder migrationBuilder)
+        public partial class InitWebDB_V1 : Migration
         {
-            migrationBuilder.AddColumn<string>(
-                name: "Content",
-                table: "article",
-                type: "ntext",
-                nullable: true);
-        }
+            protected override void Up(MigrationBuilder migrationBuilder)
+            {
+                migrationBuilder.AddColumn<string>(
+                    name: "Content",
+                    table: "article",
+                    type: "ntext",
+                    nullable: true);
+            }
 
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropColumn(
-                name: "Content",
-                table: "article");
+            protected override void Down(MigrationBuilder migrationBuilder)
+            {
+                migrationBuilder.DropColumn(
+                    name: "Content",
+                    table: "article");
+            }
         }
     }
-}

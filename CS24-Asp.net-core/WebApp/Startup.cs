@@ -34,9 +34,24 @@ namespace WebApp
             {
                 endpoints.MapGet("/", async context =>
                 {
-                    await context.Response.WriteAsync("Hello World!");
+                    string menu     = HtmlHelper.MenuTop(HtmlHelper.DefaultMenuTopItems(),context.Request);
+                    string content  = HtmlHelper.HtmlTrangchu();
+                    string html     = HtmlHelper.HtmlDocument("Trang chủ", menu + content);
+                    await  context.Response.WriteAsync(html);
                 });
+
+                endpoints.MapGet("/RequestInfo", async (context) => {
+                    string menu         = HtmlHelper.MenuTop(HtmlHelper.DefaultMenuTopItems(), context.Request);
+                    string requestinfo  = RequestProcess.RequestInfo(context.Request).HtmlTag("div", "container");
+                    string html         = HtmlHelper.HtmlDocument("Thông tin Request", (menu + requestinfo));
+                    await context.Response.WriteAsync(html);
+                });
+
             });
+
+           
+        
+
         }
     }
 }

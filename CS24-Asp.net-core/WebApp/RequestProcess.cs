@@ -1,5 +1,8 @@
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Encodings.Web;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 namespace WebApp
 {
@@ -72,5 +75,76 @@ namespace WebApp
             return  info;
         }
 
+
+        // Xử lý khi HTML Form post dữ liệu
+        public static async Task<string> FormProcess(HttpRequest request) {
+            //Xử lý đọc dữ liệu Form - khi post - dữ liệu này trình  bày trên Form
+            string hovaten  = "";
+            bool   luachon  = false;
+            string email    = "";
+            string password = "";
+            string thongbao = "";
+
+            if (request.Method ==  "POST") {
+                // Đọc dữ liệu từ Form
+                IFormCollection _form = request.Form;
+
+                email    = _form["email"].FirstOrDefault() ?? "";
+                hovaten  = _form["hovaten"].FirstOrDefault() ?? "";
+                password = _form["password"].FirstOrDefault() ?? "";
+                luachon  =  (_form["luachon"].FirstOrDefault() == "on");
+
+                thongbao = $"Dữ liệu post - email: {email} - hovaten: {hovaten} - password: {password} - luachon: {luachon} ";
+
+                // var filePath = Path.GetTempFileName();
+                // Xử lý nếu có file upload (hình ảnh,  ... )
+                if (_form.Files.Count > 0) {
+                    string thongbaofile = "Các file đã upload: ";
+                    foreach (IFormFile formFile in _form.Files)
+                    {
+                        if (formFile.Length > 0)
+                        {
+                            var filePath = "wwwroot/upload/"+formFile.FileName;    // Lấy tên  file
+                            if (!Directory.Exists("wwwroot/upload/"))  Directory.CreateDirectory("wwwroot/upload/");
+                            thongbaofile += $"{filePath} {formFile.Length} bytes";
+                            using (var stream = new FileStream(filePath, FileMode.Create)) // Mở stream để lưu file, lưu file ở thư mục wwwroot/upload/
+                            {
+                                await formFile.CopyToAsync(stream);
+                            }
+                        }
+
+                    }
+                    thongbao += "<br>" + thongbaofile;
+                }
+
+            }
+            string format   =  await File.ReadAllTextAsync("formtest.html");   // Đọc nội dung HTML từ file
+            string formhtml = string.Format(format, hovaten, email, luachon ? "checked" : "");
+            return formhtml + thongbao;
+        }
+
+
+        public static string Encoding(HttpRequest request) {
+            Microsoft.Extensions.Primitives.StringValues data;
+            bool   existdatavalue = request.Query.TryGetValue("data",  out data);
+            string datavalue      = existdatavalue ? data.FirstOrDefault() : "không có giá trị";
+
+            Microsoft.Extensions.Primitives.StringValues e;
+            bool   existevalue    = request.Query.TryGetValue("e",  out e);
+            string evalue         = existevalue ? e.FirstOrDefault() : "không có giá trị";
+
+            string dataout;
+            if (evalue == "0") {
+                // Không encode dữ liệu xuất
+                dataout = datavalue;
+            }
+            else {
+                // encode dữ liệu xuất
+                dataout = HtmlEncoder.Default.Encode(datavalue);
+            }
+            string encoding_huongdan =  File.ReadAllText("encoding.html");
+
+            return dataout.HtmlTag("div", "alert alert-danger") + encoding_huongdan;
+        }
     }
 }

@@ -47,6 +47,17 @@ namespace WebApp
                     await context.Response.WriteAsync(html);
                 });
 
+                
+                endpoints.Map("/Form", async (context) => {
+                    string menu     = HtmlHelper.MenuTop(HtmlHelper.DefaultMenuTopItems(), context.Request);
+                    string formhtml = await RequestProcess.FormProcess(context.Request);
+                           formhtml = formhtml.HtmlTag("div", "container");
+                    string html     = HtmlHelper.HtmlDocument("Form Post", (menu + formhtml));
+                    await context.Response.WriteAsync(html);
+                });
+
+                
+
             });
 
            

@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -146,5 +147,37 @@ namespace WebApp
 
             return dataout.HtmlTag("div", "alert alert-danger") + encoding_huongdan;
         }
+    
+        public static string Cookies(HttpRequest request, HttpResponse response) {
+            string tb = "";
+            switch (request.Path) {
+                case "/Cookies/read":
+                    var listcokie = request.Cookies.Select((header) => $"{header.Key}: {header.Value}".HtmlTag("li"));
+                    tb = string.Join("", listcokie).HtmlTag("ul");
+                break;
+                case "/Cookies/write":
+                    response.Cookies.Append("masanpham", "12345",
+                        new CookieOptions {
+                                Path = "/Cookies",
+                                Expires = DateTime.Now.AddDays(1)}
+                    );
+                    tb = "Đã lưu Cookie  -  masanpham - hết hạn 1 ngày".HtmlTag("div", "alert alert-danger");
+                break;
+            }
+
+            string cookies_huongdan =  File.ReadAllText("cookies.html");
+
+
+            return tb + cookies_huongdan;
+        }
+
+        public static string GetJson() {
+            var productjson = new {
+                name  = "IPhone 11",
+                price =  1000
+            };
+            return System.Text.Json.JsonSerializer.Serialize(productjson);
+        }
+
     }
 }

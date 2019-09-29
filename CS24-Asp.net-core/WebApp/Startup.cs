@@ -56,7 +56,27 @@ namespace WebApp
                     await context.Response.WriteAsync(html);
                 });
 
+                endpoints.MapGet("/Encoding", async (context) => {
+                    string menu     = HtmlHelper.MenuTop(HtmlHelper.DefaultMenuTopItems(), context.Request);
+                    string htmlec   = RequestProcess.Encoding(context.Request).HtmlTag("div", "container");
+                    string html     = HtmlHelper.HtmlDocument("Encoding", (menu + htmlec));
+                    await context.Response.WriteAsync(html);
+                }); 
+
+                endpoints.MapGet("/Cookies/{*action}", async (context) => {
+                    string menu     = HtmlHelper.MenuTop(HtmlHelper.DefaultMenuTopItems(), context.Request);
+                    string cookies  = RequestProcess.Cookies(context.Request, context.Response).HtmlTag("div", "container");
+                    string html    = HtmlHelper.HtmlDocument("Đọc / Ghi Cookies", (menu + cookies));
+                    await context.Response.WriteAsync(html);
+                }); 
+
+                endpoints.MapGet("/Json", async (context) => {
+                    string Json  = RequestProcess.GetJson();
+                    context.Response.ContentType = "application/json";
+                    await context.Response.WriteAsync(Json);
+                }); 
                 
+
 
             });
 

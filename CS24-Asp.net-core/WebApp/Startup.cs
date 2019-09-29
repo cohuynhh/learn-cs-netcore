@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace WebApp
 {
@@ -18,73 +19,22 @@ namespace WebApp
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseStaticFiles();
-            
+            app.UseRouting();
 
-            app.Map("/RequestInfo", app01 => {
-                app01.Run(async (context) => {
-                    string menu         = HtmlHelper.MenuTop(HtmlHelper.DefaultMenuTopItems(), context.Request);
-                    string requestinfo  = RequestProcess.RequestInfo(context.Request).HtmlTag("div", "container");
-                    string html         = HtmlHelper.HtmlDocument("Thông tin Request", (menu + requestinfo));
-                    await context.Response.WriteAsync(html);
-                });
-            });
-             
-            app.Map("/Form", app01 => {
-                app01.Run(async (context) => {
-                    string menu     = HtmlHelper.MenuTop(HtmlHelper.DefaultMenuTopItems(), context.Request);
-                    string formhtml = await RequestProcess.FormProcess(context.Request);
-                           formhtml = formhtml.HtmlTag("div", "container");
-                    string html     = HtmlHelper.HtmlDocument("Form Post", (menu + formhtml));
-                    await context.Response.WriteAsync(html);
-                });
-            });
-
-
-            app.Map("/Encoding", app01 => {
-                app01.Run(async (context) => {
-                    string menu     = HtmlHelper.MenuTop(HtmlHelper.DefaultMenuTopItems(), context.Request);
-                    string htmlec   = RequestProcess.Encoding(context.Request).HtmlTag("div", "container");
-                    string html     = HtmlHelper.HtmlDocument("Encoding", (menu + htmlec));
-                    await context.Response.WriteAsync(html);
-                });
-            });
-
-            app.Map("/Cookies", app01 => {
-                app01.Run(async (context) => {
-                    string menu     = HtmlHelper.MenuTop(HtmlHelper.DefaultMenuTopItems(), context.Request);
-                    string cookies  = RequestProcess.Cookies(context.Request, context.Response).HtmlTag("div", "container");
-                     string html    = HtmlHelper.HtmlDocument("Đọc / Ghi Cookies", (menu + cookies));
-                    await context.Response.WriteAsync(html);
-                });
-            });
-            
-            app.Map("/Json", app01 => {
-                app01.Run(async (context) => {
-                    string Json  = RequestProcess.GetJson();
-                    context.Response.ContentType = "application/json";
-                    await context.Response.WriteAsync(Json);
-                });
-            });
-            
-
-            app.Run(async (HttpContext context) =>
+            app.UseEndpoints(endpoints =>
             {
-                string menu     = HtmlHelper.MenuTop(HtmlHelper.DefaultMenuTopItems(),context.Request);
-                string content  = HtmlHelper.HtmlTrangchu();
-                string html     = HtmlHelper.HtmlDocument("Trang chủ", menu + content);
-                await context.Response.WriteAsync(html);
+                endpoints.MapGet("/", async context =>
+                {
+                    await context.Response.WriteAsync("Hello World!");
+                });
             });
-
-            
-            
         }
     }
 }

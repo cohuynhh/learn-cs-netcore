@@ -1,24 +1,23 @@
+using System;
+using System.IO;
 using System.Linq;
 using System.Text;
-using Microsoft.AspNetCore.Http;
-using System.IO;
-using System.Threading.Tasks;
 using System.Text.Encodings.Web;
-using System;
-using Newtonsoft.Json;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 namespace WebApp
 {
     public static class RequestProcess
     {
-            
+
         // Đọc các thông tin cơ bản của Request
         // Trả về HTML trình  bày các thông tin đó
         public static string RequestInfo(HttpRequest request) {
 
-            var sb = new StringBuilder(); 
+            var sb = new StringBuilder();
 
             // Lấy http scheme (http|https)
-            var scheme  =  request.Scheme; 
+            var scheme  =  request.Scheme;
             sb.Append(("scheme".td() + scheme.td()).tr());
 
             // HOST Header
@@ -71,12 +70,13 @@ namespace WebApp
             Microsoft.Extensions.Primitives.StringValues abc;
             bool existabc = request.Query.TryGetValue("abc",  out abc);
             string queryVal = existabc ? abc.FirstOrDefault() : "không có giá trị";
-            sb.Append(("abc query".td() + queryVal.ToString().td()).tr()); 
- 
+            sb.Append(("abc query".td() + queryVal.ToString().td()).tr());
+
             string info =  "Thông tin Request".HtmlTag("h2") + sb.ToString().HtmlTag("table", "table table-sm table-bordered");
             return  info;
         }
- 
+
+
         // Xử lý khi HTML Form post dữ liệu
         public static async Task<string> FormProcess(HttpRequest request) {
             //Xử lý đọc dữ liệu Form - khi post - dữ liệu này trình  bày trên Form
@@ -87,16 +87,16 @@ namespace WebApp
             string thongbao = "";
 
             if (request.Method ==  "POST") {
-                // Đọc dữ liệu từ Form 
+                // Đọc dữ liệu từ Form
                 IFormCollection _form = request.Form;
-                
+
                 email    = _form["email"].FirstOrDefault() ?? "";
                 hovaten  = _form["hovaten"].FirstOrDefault() ?? "";
                 password = _form["password"].FirstOrDefault() ?? "";
                 luachon  =  (_form["luachon"].FirstOrDefault() == "on");
 
                 thongbao = $"Dữ liệu post - email: {email} - hovaten: {hovaten} - password: {password} - luachon: {luachon} ";
-                
+
                 // var filePath = Path.GetTempFileName();
                 // Xử lý nếu có file upload (hình ảnh,  ... )
                 if (_form.Files.Count > 0) {
@@ -110,22 +110,22 @@ namespace WebApp
                             thongbaofile += $"{filePath} {formFile.Length} bytes";
                             using (var stream = new FileStream(filePath, FileMode.Create)) // Mở stream để lưu file, lưu file ở thư mục wwwroot/upload/
                             {
-                                 await formFile.CopyToAsync(stream);
+                                await formFile.CopyToAsync(stream);
                             }
                         }
 
                     }
-                    thongbao += "<br>" + thongbaofile; 
+                    thongbao += "<br>" + thongbaofile;
                 }
-             
+
             }
             string format   =  await File.ReadAllTextAsync("formtest.html");   // Đọc nội dung HTML từ file
             string formhtml = string.Format(format, hovaten, email, luachon ? "checked" : "");
             return formhtml + thongbao;
         }
 
+
         public static string Encoding(HttpRequest request) {
-            
             Microsoft.Extensions.Primitives.StringValues data;
             bool   existdatavalue = request.Query.TryGetValue("data",  out data);
             string datavalue      = existdatavalue ? data.FirstOrDefault() : "không có giá trị";
@@ -136,37 +136,38 @@ namespace WebApp
 
             string dataout;
             if (evalue == "0") {
+                // Không encode dữ liệu xuất
                 dataout = datavalue;
             }
             else {
+                // encode dữ liệu xuất
                 dataout = HtmlEncoder.Default.Encode(datavalue);
             }
-            string encoding_huongdan =  File.ReadAllText("encoding.html"); 
-        
+            string encoding_huongdan =  File.ReadAllText("encoding.html");
+
             return dataout.HtmlTag("div", "alert alert-danger") + encoding_huongdan;
         }
-
+    
         public static string Cookies(HttpRequest request, HttpResponse response) {
-        
             string tb = "";
             switch (request.Path) {
-                case "/read":
+                case "/Cookies/read":
                     var listcokie = request.Cookies.Select((header) => $"{header.Key}: {header.Value}".HtmlTag("li"));
                     tb = string.Join("", listcokie).HtmlTag("ul");
                 break;
-                case "/write":
-                    response.Cookies.Append("masanpham", "12345", 
+                case "/Cookies/write":
+                    response.Cookies.Append("masanpham", "12345",
                         new CookieOptions {
                                 Path = "/Cookies",
                                 Expires = DateTime.Now.AddDays(1)}
-                    ); 
+                    );
                     tb = "Đã lưu Cookie  -  masanpham - hết hạn 1 ngày".HtmlTag("div", "alert alert-danger");
                 break;
             }
 
-            string cookies_huongdan =  File.ReadAllText("cookies.html"); 
+            string cookies_huongdan =  File.ReadAllText("cookies.html");
 
-        
+
             return tb + cookies_huongdan;
         }
 
@@ -175,7 +176,7 @@ namespace WebApp
                 name  = "IPhone 11",
                 price =  1000
             };
-            return JsonConvert.SerializeObject(productjson);
+            return System.Text.Json.JsonSerializer.Serialize(productjson);
         }
 
     }

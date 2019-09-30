@@ -4,7 +4,7 @@ namespace WebApp.Services
 {
     public interface IListProductName
     {
-         // Trả về danh sách các tên
-         IEnumerable<string> GetNames();
+            // Trả về danh sách các tên
+            IEnumerable<string> GetNames();
     }
 }

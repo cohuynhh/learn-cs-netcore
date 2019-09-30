@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using System.Text;
+using System;
 
 public static class HtmlHelper
 {
@@ -42,8 +43,7 @@ public static class HtmlHelper
           menubuilder.Append("<ul class=\"navbar-nav\">");
           foreach (dynamic menu in menus) {
               string _class = "nav-item";
-              // Active khi request.PathBase giống url của menu
-              if (request.PathBase  == menu.url)  _class += " active"; 
+              if (request.Path  == menu.url)  _class += " active"; 
               menubuilder.Append($@"
                                 <li class=""{_class}"">
                                     <a class=""nav-link"" href=""{menu.url}"">{menu.label}</a>
@@ -76,12 +76,6 @@ public static class HtmlHelper
       /// <returns>Mảng các menuitem</returns>
       public static object[] DefaultMenuTopItems() {
           return new object[] {
-              
-              new {
-                  url = "/Product",
-                  label = "Product"
-              },
-
               new {
                   url = "/RequestInfo",
                   label = "Request"
@@ -102,6 +96,11 @@ public static class HtmlHelper
               new {
                   url = "/Json",
                   label = "JSON"
+              },
+
+            new {
+                  url = "/Product",
+                  label = "Product"
               }
           };
       }

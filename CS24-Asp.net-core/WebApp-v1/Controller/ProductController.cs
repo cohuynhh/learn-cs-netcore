@@ -1,38 +1,43 @@
-using WebApp.Services;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using System.Text;
-using System.Linq;
+    using WebApp.Services;
+    using System;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Http;
+    using System.Text;
+    using System.Linq;
 
-namespace WebApp.Controller
-{
-    public class ProductController
+    namespace WebApp.Controller
     {
-        IListProductName lsPhone;
-        IListProductName lsLaptop;
-        public ProductController(IListProductName lsphone, LaptopName lslaptop) {
-            Console.WriteLine(this.GetType().Name + " created");
-            this.lsPhone  = lsphone;
-            this.lsLaptop = lslaptop;
-        }
-        public async Task List(HttpContext context) {
-            var sb = new StringBuilder(); 
+        public class ProductController
+        {
+            IListProductName lsPhone;
+            IListProductName lsLaptop;
 
-            string lsPhoneHTML  = string.Join("", lsPhone.GetNames().Select(name  => name.HtmlTag("li"))).HtmlTag("ul");
-            string lsLaptopHTML = string.Join("", lsLaptop.GetNames().Select(name => name.HtmlTag("li"))).HtmlTag("ul");
-            sb.Append("Danh sách điện thoại".HtmlTag("h2"));
-            sb.Append(lsPhoneHTML);
+            // Inject hai dịch vụ qua phương thức khởi tạo
+            public ProductController(IListProductName lsphone, LaptopName lslaptop) {
+                Console.WriteLine(this.GetType().Name + " created");
+                this.lsPhone  = lsphone;
+                this.lsLaptop = lslaptop;
+            }
+    
+            // Xuất danh sách sản phẩm cho Response
+            public async Task List(HttpContext context) {
 
-            sb.Append("Danh sách Laptop".HtmlTag("h2"));
-            sb.Append(lsLaptopHTML);
+                var sb = new StringBuilder();
+                string lsPhoneHTML  = string.Join("", lsPhone.GetNames().Select(name  => name.HtmlTag("li"))).HtmlTag("ul");
+                string lsLaptopHTML = string.Join("", lsLaptop.GetNames().Select(name => name.HtmlTag("li"))).HtmlTag("ul");
+                sb.Append("Danh sách điện thoại".HtmlTag("h2"));
+                sb.Append(lsPhoneHTML);
 
-            string menu         = HtmlHelper.MenuTop(HtmlHelper.DefaultMenuTopItems(), context.Request);
-            string html         = HtmlHelper.HtmlDocument("DS Sản phẩm", menu + sb.ToString().HtmlTag("div", "container"));
+                sb.Append("Danh sách Laptop".HtmlTag("h2"));
+                sb.Append(lsLaptopHTML);
 
-            context.Response.StatusCode = 200;
-            await context.Response.WriteAsync(html);
+                string menu         = HtmlHelper.MenuTop(HtmlHelper.DefaultMenuTopItems(), context.Request);
+                string html         = HtmlHelper.HtmlDocument("DS Sản phẩm", menu + sb.ToString().HtmlTag("div", "container"));
+
+                context.Response.StatusCode = 200;
+                await context.Response.WriteAsync(html);
+            }
         }
     }
-}
+    

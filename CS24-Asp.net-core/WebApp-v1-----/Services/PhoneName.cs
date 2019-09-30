@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System;
-
 namespace WebApp.Services
 {
     public class PhoneName : IListProductName
@@ -15,4 +14,3 @@ namespace WebApp.Services
         }
     }
 }
-

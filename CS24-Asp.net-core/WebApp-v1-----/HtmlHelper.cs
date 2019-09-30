@@ -76,6 +76,12 @@ public static class HtmlHelper
       /// <returns>Mảng các menuitem</returns>
       public static object[] DefaultMenuTopItems() {
           return new object[] {
+              
+              new {
+                  url = "/Product",
+                  label = "Product"
+              },
+
               new {
                   url = "/RequestInfo",
                   label = "Request"

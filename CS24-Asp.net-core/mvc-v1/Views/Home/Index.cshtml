@@ -1,5 +1,7 @@
-﻿@{
-    Layout = null;   // Thiết lập không có sử dụng Layout cho View này
+﻿@model List<string>
+    
+@{
+    Layout = null;      
 }
 <!doctype html>
 <html>
@@ -11,5 +13,12 @@
         <p><i>@DateTime.Now.ToLongDateString() xuanthulab.net</i></p>
         <p>@ViewBag.dulieu1</p>
         <p>@ViewBag.dulieu2</p>
+
+        <ol>
+            @foreach (var sp in Model) {
+                <li>@sp</li>
+            }
+        </ol>
+
     </body>
 </html>

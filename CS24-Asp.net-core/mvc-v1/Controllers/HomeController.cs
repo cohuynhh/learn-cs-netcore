@@ -23,7 +23,14 @@ namespace mvc_v1.Controllers
         {
             ViewBag.dulieu1 = "Đây là dữ liệu 1";
             ViewBag.dulieu2 = 12345;
-            return View();
+
+            List<string> sanpham = new List<string>(){
+                "Bàn ăn",
+                "Giường ngủ",
+                "Tủ áo"
+            };
+
+            return View(sanpham);
         }
 
         public IActionResult Privacy()

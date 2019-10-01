@@ -21,8 +21,8 @@ namespace mvc_v1.Controllers
 
         public IActionResult Index()
         {
-            var a = RouteData;
-            Console.WriteLine(RouteData.Values["title"]);
+            ViewBag.dulieu1 = "Đây là dữ liệu 1";
+            ViewBag.dulieu2 = 12345;
             return View();
         }
 

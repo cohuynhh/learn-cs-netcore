@@ -1,5 +1,5 @@
 ﻿@{
-    Layout = null;
+    Layout = null;   // Thiết lập không có sử dụng Layout cho View này
 }
 <!doctype html>
 <html>
@@ -9,5 +9,7 @@
     <body>
         <p>View .CSHTML là template <strong>Razor</strong> - nó chứa code C# bắt đầu bởi @@</p>
         <p><i>@DateTime.Now.ToLongDateString() xuanthulab.net</i></p>
+        <p>@ViewBag.dulieu1</p>
+        <p>@ViewBag.dulieu2</p>
     </body>
 </html>

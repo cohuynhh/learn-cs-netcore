@@ -1,20 +1,31 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.AspNetCore.Routing.Constraints;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 namespace mvc_v1
-{
+{ 
+
     public class Startup
     {
+
+
         public Startup(IConfiguration configuration)
         {
+            
+             
+
+
             Configuration = configuration;
         }
 
@@ -51,7 +62,22 @@ namespace mvc_v1
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+                endpoints.MapControllerRoute(
+                    name: "myroute",
+                    defaults: new {controller="Home", action = "Index"},
+
+                    constraints: new {
+                        id     = @"\d+",
+                        title  = new RegexRouteConstraint(new Regex(@"^[a-z0-9-]*$"))
+                    },
+                    
+                    pattern: "{title}-{id}.html");    
+
             });
+
+                   
+
         }
     }
 }

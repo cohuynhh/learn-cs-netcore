@@ -1,4 +1,4 @@
-version: "3"                    
+version: "3.7"                    
 
 services:                         
   xtlab-mssql:
@@ -18,5 +18,7 @@ services:
       - "1433:1433"     
                         
 volumes:                                
-    mssqlvolume:                            
+    mssqlvolume:        
+      name: mssql_mssqlvolume
+                    
   
